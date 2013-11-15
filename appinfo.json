@@ -1,8 +1,8 @@
 {
   "uuid": "0a5399d9-5693-4f3e-b768-9c99b5f5dcea",
-  "shortName": "Ocean Survey",
-  "longName": "Ocean Survey",
-  "companyName": "Pebble Environment Services",
+  "shortName": "Pebble Presenter",
+  "longName": "Pebble Presenter",
+  "companyName": "",
   "versionCode": 1,
   "versionLabel": "1.0.0",
   "watchapp": {

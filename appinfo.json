@@ -1,31 +1,19 @@
 {
-  "uuid": "0a5399d9-5693-4f3e-b768-9c99b5f5dcea",
+  "uuid": "2a3352d5-2d44-437f-9652-98464640aeab",
   "shortName": "Pebble Presenter",
-  "longName": "Pebble Presenter",
+  "longName": "Pebble Presneter",
   "companyName": "",
   "versionCode": 1,
   "versionLabel": "1.0.0",
   "watchapp": {
     "watchface": false
   },
-  "appKeys": {},
+  "appKeys": {
+    "symbol": 0,
+    "price": 1,
+    "fetch": 2
+  },
   "resources": {
-    "media": [
-      {
-        "type": "png",
-        "name": "IMAGE_ACTION_ICON_DOLPHIN",
-        "file": "images/dolphin.png"
-      },
-      {
-        "type": "png",
-        "name": "IMAGE_ACTION_ICON_SEALION",
-        "file": "images/sealion.png"
-      },
-      {
-        "type": "png",
-        "name": "IMAGE_ACTION_ICON_PELICAN",
-        "file": "images/pelican.png"
-      }
-    ]
+    "media": []
   }
 }

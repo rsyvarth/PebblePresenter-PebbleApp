@@ -1,70 +1,85 @@
-// Fetch saved symbol from local storage (using standard localStorage webAPI)
-var symbol = localStorage.getItem("symbol");
 
-// We use the fake "PBL" symbol as default
-if (!symbol) {
-  symbol = "PBL";
+function iconFromWeatherId(weatherId) {
+  if (weatherId < 600) {
+    return 2;
+  } else if (weatherId < 700) {
+    return 3;
+  } else if (weatherId > 800) {
+    return 1;
+  } else {
+    return 0;
+  }
 }
 
-// Fetch stock data for a given stock symbol (NYSE or NASDAQ only) from markitondemand.com
-// & send the stock price back to the watch via app message
-// API documentation at http://dev.markitondemand.com/#doc
-function fetchStockQuote(symbol) {
+function fetchWeather(latitude, longitude) {
   var response;
   var req = new XMLHttpRequest();
-  // build the GET request
-  req.open('GET', "http://dev.markitondemand.com/Api/Quote/json?" +
-    "symbol=" + symbol, true);
+  req.open('GET', "http://api.openweathermap.org/data/2.1/find/city?" +
+    "lat=" + latitude + "&lon=" + longitude + "&cnt=1", true);
   req.onload = function(e) {
     if (req.readyState == 4) {
-      // 200 - HTTP OK
       if(req.status == 200) {
         console.log(req.responseText);
         response = JSON.parse(req.responseText);
-        var price;
-        if (response.Message) {
-          // the merkitondemand API sends a response with a Message
-          // field when the symbol is not found
+        var temperature, icon, city;
+        if (response && response.list && response.list.length > 0) {
+          var weatherResult = response.list[0];
+          temperature = Math.round(weatherResult.main.temp - 273.15);
+          icon = iconFromWeatherId(weatherResult.weather[0].id);
+          city = weatherResult.name;
+          console.log(temperature);
+          console.log(icon);
+          console.log(city);
           Pebble.sendAppMessage({
-            "price": "Not Found"});
+            "icon":icon,
+            "temperature":temperature + "\u00B0C",
+            "city":city});
         }
-        if (response.Data) {
-          // data found, look for LastPrice
-          price = response.Data.LastPrice;
-          console.log(price);
-          Pebble.sendAppMessage({
-            "price": "$" + price.toString()});
-        }
+
       } else {
-        console.log("Request returned error code " + req.status.toString());
+        console.log("Error");
       }
     }
   }
   req.send(null);
 }
 
-// Set callback for the app ready event
+function locationSuccess(pos) {
+  var coordinates = pos.coords;
+  fetchWeather(coordinates.latitude, coordinates.longitude);
+}
+
+function locationError(err) {
+  console.warn('location error (' + err.code + '): ' + err.message);
+  Pebble.sendAppMessage({
+    "city":"Loc Unavailable",
+    "temperature":"N/A"
+  });
+}
+
+var locationOptions = { "timeout": 15000, "maximumAge": 60000 }; 
+
+
 Pebble.addEventListener("ready",
                         function(e) {
                           console.log("connect!" + e.ready);
+                          locationWatcher = window.navigator.geolocation.watchPosition(locationSuccess, locationError, locationOptions);
                           console.log(e.type);
                         });
 
-// Set callback for appmessage events
 Pebble.addEventListener("appmessage",
                         function(e) {
-                          console.log("message");
-                          if (e.payload.symbol) {
-                            symbol = e.payload.symbol;
-                            localStorage.setItem("symbol", symbol);
-                            fetchStockQuote(symbol);
-                          }
-                          if (e.payload.fetch) {
-                            Pebble.sendAppMessage({"symbol": symbol});
-                            fetchStockQuote(symbol);
-                          }
-                          if (e.payload.price) {
-                            fetchStockQuote(symbol);
-                          }
+                          window.navigator.geolocation.getCurrentPosition(locationSuccess, locationError, locationOptions);
+                          console.log(e.type);
+                          console.log(e.payload.temperature);
+                          console.log("message!");
                         });
+
+Pebble.addEventListener("webviewclosed",
+                                     function(e) {
+                                     console.log("webview closed");
+                                     console.log(e.type);
+                                     console.log(e.response);
+                                     });
+
 

@@ -21,7 +21,7 @@ function fetchAuthKey() {
 		console.log(req.responseText);
 		response = JSON.parse(req.responseText);
 		if (response.auth_key) {
-		    Pebble.sendAppMessage({symbol: response.auth_key});
+		    Pebble.sendAppMessage({symbol: response.auth_key.toString()});
 		    localStorage.setItem("auth_key", response.auth_key);
 		    localStorage.setItem("pebble_id", response.pebble_id);
 		} else if( response.pres_id ) {
@@ -39,8 +39,8 @@ function changeSlide(direction) {
   var response;
   var req = new XMLHttpRequest();
   console.log('Change the slide');
-
-  var direct = direction < 0 ? 'next' : 'back';
+  console.log(direction);
+  var direct = direction == -1 ? 'next' : 'back';
   // build the GET request
   req.open('GET', "http://pebblepresenter.syvarth.com/changeSlide/"+localStorage.getItem("pebble_id")+"/"+direct, true);
   req.onload = function(e) {

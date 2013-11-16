@@ -40,7 +40,7 @@ function changeSlide(direction) {
   var req = new XMLHttpRequest();
   console.log('Change the slide');
   console.log(direction);
-  var direct = direction == -1 ? 'next' : 'back';
+  var direct = (direction == -1) ? 'next' : 'back';
   // build the GET request
   req.open('GET', "http://pebblepresenter.syvarth.com/changeSlide/"+localStorage.getItem("pebble_id")+"/"+direct, true);
   req.onload = function(e) {

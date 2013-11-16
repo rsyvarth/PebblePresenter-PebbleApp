@@ -3,7 +3,7 @@ var symbol = localStorage.getItem("symbol");
 
 // We use the fake "PBL" symbol as default
 if (!symbol) {
-  symbol = "GOOG";
+  symbol = "PBL";
 }
 
 // Fetch stock data for a given stock symbol (NYSE or NASDAQ only) from markitondemand.com
@@ -11,12 +11,10 @@ if (!symbol) {
 // API documentation at http://dev.markitondemand.com/#doc
 function fetchStockQuote(symbol) {
   var response;
-  console.log('Start request to google');
-  Pebble.sendAppMessage({
-            "price": "$MONEY"});
   var req = new XMLHttpRequest();
   // build the GET request
-  req.open('GET', "http://dev.markitondemand.com/Api/Quote/json?symbol=GOOG", true);
+  req.open('GET', "http://dev.markitondemand.com/Api/Quote/json?" +
+    "symbol=" + symbol, true);
   req.onload = function(e) {
     if (req.readyState == 4) {
       // 200 - HTTP OK
@@ -54,20 +52,19 @@ Pebble.addEventListener("ready",
 
 // Set callback for appmessage events
 Pebble.addEventListener("appmessage",
-                        func tion(e) {
-                          console.log("message213123");
-                          fetchStockQuote('GooG');
-                          // if (e.payload.symbol) {
-                          //   symbol = e.payload.symbol;
-                          //   localStorage.setItem("symbol", symbol);
-                          //   fetchStockQuote(symbol);
-                          // }
-                          // if (e.payload.fetch) {
-                          //   Pebble.sendAppMessage({"symbol": symbol});
-                          //   fetchStockQuote(symbol);
-                          // }
-                          // if (e.payload.price) {
-                          //   fetchStockQuote(symbol);
-                          // }
+                        function(e) {
+                          console.log("message");
+                          if (e.payload.symbol) {
+                            symbol = e.payload.symbol;
+                            localStorage.setItem("symbol", symbol);
+                            fetchStockQuote(symbol);
+                          }
+                          if (e.payload.fetch) {
+                            Pebble.sendAppMessage({"symbol": symbol});
+                            fetchStockQuote(symbol);
+                          }
+                          if (e.payload.price) {
+                            fetchStockQuote(symbol);
+                          }
                         });
 

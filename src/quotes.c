@@ -1,6 +1,6 @@
 #include <pebble.h>
 
-#include "entry.h"
+//#include "entry.h"
 
 static Window *window;
 static TextLayer *symbol_layer;
@@ -55,7 +55,7 @@ static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
 
 static void select_long_click_handler(ClickRecognizerRef recognizer, void *context) {
   // refresh
-  entry_get_name(symbol, set_symbol_msg);
+  //entry_get_name(symbol, set_symbol_msg);
   text_layer_set_text(symbol_layer, symbol);
   text_layer_set_text(price_layer, "Loading...");
 }

@@ -51,6 +51,13 @@ static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
   if(current_slide<=0){current_slide=1;} 
   set_slide(-1);
 
+  display_Slides();
+}
+
+static void display_Slides(void){
+  char* cur_slide_str[10]; itoa(current_slide,cur_slide_str,10);
+  char* tot_slide_str[10]; itoa(total_slide,tot_slide_str,10);
+
   char* displayslide = malloc(strlen("Slide ")+strlen(cur_slide_str)+strlen(tot_slide_str)+2);//JANKY, PROBABLY NEEDS FIXING
   strcpy(displayslide,"Slide "); strcat(displayslide,cur_slide_str); strcat(displayslide,"/"); strcat(displayslide,tot_slide_str);
   displayslide[0] = '\0';
@@ -65,13 +72,7 @@ static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
   if(current_slide>total_slide){current_slide=total_slide;} 
   set_slide(1);
 
-  char* displayslide = malloc(strlen("Slide ")+strlen(cur_slide_str)+strlen(tot_slide_str)+2);//JANKY, PROBABLY NEEDS FIXING
-  strcpy(displayslide,"Slide "); strcat(displayslide,cur_slide_str); strcat(displayslide,"/"); strcat(displayslide,tot_slide_str);
-  displayslide[0] = '\0';
-
-  text_layer_set_font(slide_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
-  text_layer_set_text(slide_layer, displayslide); //CHARLIE WHAT THE HECK WERE YOU THINKING
-  free(displayslide);
+  display_Slides();
 }
 
 //picks which handler to run based on which button was pressed

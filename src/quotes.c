@@ -47,26 +47,30 @@ static void fetch_msg(void) {//sends out fetch and price to phone
 }
 
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
-  // refresh
-  text_layer_set_font(symbol_layer, fonts_get_system_font(FONT_KEY_GOTHIC_14));
   text_layer_set_text(price_layer, "Retrieving auth code");
-  fetch_msg();
+  //here, call the auth subroutine stuff all over again 
+
+  //fetch_msg();BUYAO
 }
 
 static void select_long_click_handler(ClickRecognizerRef recognizer, void *context) {
   // refresh
-  //entry_get_name(symbol, set_symbol_msg);
-  //text_layer_set_font(symbol_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
-  //text_layer_set_text(symbol_layer, "Slide #/#");
-  //text_layer_set_text(price_layer, "Loading...");
+  //entry_get_name(symbol, set_symbol_msg);BUYAO
+  //text_layer_set_font(symbol_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));BUYAO
+  //text_layer_set_text(symbol_layer, "Slide #/#");BUYAO
+  //text_layer_set_text(price_layer, "Loading...");BUYAO
 }
 
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
+  text_layer_set_font(symbol_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
+  text_layer_set_text(symbol_layer, "Slide #/#");
   // decrement current_slide, ensure wraparound, send to phone instructions to go back one slide
 }
 
 static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
   // increment current_slide, ensure wraparound, send to phone instructions to go to next slide
+  text_layer_set_font(symbol_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
+  text_layer_set_text(symbol_layer, "Slide #/#");
 }
 
 //picks which handler to run based on which button was pressed
@@ -107,7 +111,7 @@ static void app_message_init(void) {
   app_message_register_outbox_failed(out_failed_handler);
   // Init buffers
   app_message_open(64, 64);
-  //fetch_msg();
+  //fetch_msg();BUYAO
 }
 
 static void window_load(Window *window) {
@@ -135,7 +139,7 @@ static void window_load(Window *window) {
   text_layer_set_text(price_layer, "Auth code: ####");
 
   //here, request total_slide?
-  fetch_msg();
+  //fetch_msg(); BUYAO
 }
 
 static void window_unload(Window *window) {

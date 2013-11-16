@@ -1,5 +1,4 @@
 #include <pebble.h>
-#include <stdlib.h>
 
 static Window *window;
 static TextLayer *slide_layer;
@@ -8,7 +7,7 @@ static char auth[5];
 static int total_slide =0;
 static int current_slide=0;
 
-void display_Slides(void);
+void display_Slides(void);void reverse(char);void itoa(int, char);
 
 enum {
   AUTH_KEY = 0x0,
@@ -49,17 +48,36 @@ static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
 
 static void select_long_click_handler(ClickRecognizerRef recognizer, void *context) {}//Do we really need this? maybe jump to start of slideshow?
 
-static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
-  current_slide--; 
-  if(current_slide<=0){current_slide=1;} 
-  set_slide(-1);
+ /* reverse:  reverse string s in place */
+void reverse(char s[]){
+     int i, j;
+     char c;
+ 
+     for (i = 0, j = strlen(s)-1; i<j; i++, j--) {
+         c = s[i];
+         s[i] = s[j];
+         s[j] = c;
+     }
+}
 
-  display_Slides();
+void itoa(int n, char s[]){
+     int i, sign;
+ 
+     if ((sign = n) < 0)  /* record sign */
+         n = -n;          /* make n positive */
+     i = 0;
+     do {       /* generate digits in reverse order */
+         s[i++] = n % 10 + '0';   /* get next digit */
+     } while ((n /= 10) > 0);     /* delete it */
+     if (sign < 0)
+         s[i++] = '-';
+     s[i] = '\0';
+     reverse(s);
 }
 
 void display_Slides(void){
-  char cur_slide_str[10]; itoa(current_slide,cur_slide_str,10);
-  char tot_slide_str[10]; itoa(total_slide,tot_slide_str,10);
+  char cur_slide_str[33]; itoa(current_slide,cur_slide_str,10);
+  char tot_slide_str[33]; itoa(total_slide,tot_slide_str,10);
 
   char* displayslide = malloc(strlen("Slide ")+strlen(cur_slide_str)+strlen(tot_slide_str)+2);//JANKY, PROBABLY NEEDS FIXING
   strcpy(displayslide,"Slide "); strcat(displayslide,cur_slide_str); strcat(displayslide,"/"); strcat(displayslide,tot_slide_str);
@@ -68,6 +86,14 @@ void display_Slides(void){
   text_layer_set_font(slide_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
   text_layer_set_text(slide_layer, displayslide); //CHARLIE WHAT THE HECK WERE YOU THINKING
   free(displayslide);
+}
+
+static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
+  current_slide--; 
+  if(current_slide<=0){current_slide=1;} 
+  set_slide(-1);
+
+  display_Slides();
 }
 
 static void down_click_handler(ClickRecognizerRef recognizer, void *context) {

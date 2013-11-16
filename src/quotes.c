@@ -1,4 +1,5 @@
 #include <pebble.h>
+#include <stdlib.h>
 
 static Window *window;
 static TextLayer *slide_layer;

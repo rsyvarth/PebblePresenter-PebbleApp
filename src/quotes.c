@@ -1,72 +1,65 @@
 #include <pebble.h>
 
 static Window *window;
-static TextLayer *symbol_layer;
-static TextLayer *price_layer;
-static char symbol[5];
-static char price[10];
-static int total_slide;
-static int current_slide;
+static TextLayer *slide_layer;
+static TextLayer *auth_layer;
+static char auth[5];
+static int total_slide =0;
+static int current_slide=0;
 
 enum {
-  QUOTE_KEY_SYMBOL = 0x0,
-  QUOTE_KEY_PRICE = 0x1,
-  QUOTE_KEY_FETCH = 0x2,
+  AUTH_KEY = 0x0,
+  SLIDE_KEY = 0x1,
 };
 
-static void set_symbol_msg(char *symbol) {//sends symbol to phone, repurpose this for auth code
-  Tuplet symbol_tuple = TupletCString(QUOTE_KEY_SYMBOL, symbol);
+static void set_auth(char *auth) {//sends auth request to phone
+  auth = "refr";
+  Tuplet auth_tuple = TupletCString(AUTH_KEY, auth);
 
   DictionaryIterator *iter;
   app_message_outbox_begin(&iter);
-
   if (iter == NULL) {return;}
 
-  dict_write_tuplet(iter, &symbol_tuple);
+  dict_write_tuplet(iter, &auth_tuple);
   dict_write_end(iter);
-
   app_message_outbox_send();
 }
 
-static void fetch_msg(void) {//sends out fetch and price to phone, repurpose this for total slide and/or current slide
-  Tuplet fetch_tuple = TupletInteger(QUOTE_KEY_FETCH, 1);
-  Tuplet price_tuple = TupletInteger(QUOTE_KEY_PRICE, 1);
+static void set_slide(int command) {//sends slide commands to phone; 0 for total slide, 1 for next slide, -1 for previous slide
+  Tuplet slide_tuple = TupletInteger(SLIDE_KEY, command);
 
   DictionaryIterator *iter;
   app_message_outbox_begin(&iter);
-
   if (iter == NULL) {return;}
 
-  dict_write_tuplet(iter, &fetch_tuple);
-  dict_write_tuplet(iter, &price_tuple);
+  dict_write_tuplet(iter, &slide_tuple);
   dict_write_end(iter);
-
   app_message_outbox_send();
 }
 
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
-  text_layer_set_text(price_layer, "Retrieving auth code");
-  //TODO: write a function that sends an empty id, waits for return
-  //char[] auth = return with auth code
-  //write auth to screen
-
-  text_layer_set_text(price_layer, "Auth code: ####");
-
-  //here, request total_slide
+  text_layer_set_text(auth_layer, "Retrieving auth code");
+  set_auth(&auth);
+  set_slide(0);
+  current_slide=1;
 }
 
 static void select_long_click_handler(ClickRecognizerRef recognizer, void *context) {}//Do we really need this? maybe jump to start of slideshow?
 
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
-  text_layer_set_font(symbol_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
-  text_layer_set_text(symbol_layer, "Slide #/#");
-  // decrement current_slide, ensure wraparound, send to phone instructions to go back one slide
+  current_slide--; 
+  if(current_slide<=0){current_slide=1;} 
+  set_slide(-1);
+  text_layer_set_font(slide_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
+  text_layer_set_text(slide_layer, "Slide %d/%d",current_slide,total_slide);
 }
 
 static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
-  text_layer_set_font(symbol_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
-  text_layer_set_text(symbol_layer, "Slide #/#");
-  // increment current_slide, ensure wraparound, send to phone instructions to go to next slide
+  current_slide++; 
+  if(current_slide>total_slide){current_slide=total_slide;} 
+  set_slide(1);
+  text_layer_set_font(slide_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
+  text_layer_set_text(slide_layer, "Slide %d/%d",current_slide,total_slide);
 }
 
 //picks which handler to run based on which button was pressed
@@ -78,17 +71,16 @@ static void click_config_provider(void *context) {
   window_single_repeating_click_subscribe(BUTTON_ID_DOWN, repeat_interval_ms, down_click_handler);
 }
 
-static void in_received_handler(DictionaryIterator *iter, void *context) {//recieves symbol and price from phone
-  Tuple *symbol_tuple = dict_find(iter, QUOTE_KEY_SYMBOL);
-  Tuple *price_tuple = dict_find(iter, QUOTE_KEY_PRICE);
+static void in_received_handler(DictionaryIterator *iter, void *context) {//recieves symbol and price from phone// 
+  Tuple *slide_tuple = dict_find(iter, SLIDE_KEY);
+  Tuple *auth_tuple = dict_find(iter, AUTH_KEY);
 
-  if (symbol_tuple) {
-    strncpy(symbol, symbol_tuple->value->cstring, 5);
-    text_layer_set_text(symbol_layer, symbol);
+  if (slide_tuple) {
+    if(slide_tuple->value->data!=0){total_slide = slide_tuple->value->data;}	
   }
-  if (price_tuple) {
-    strncpy(price, price_tuple->value->cstring, 10);
-    text_layer_set_text(price_layer, price);
+  if (auth_tuple) {
+    strncpy(auth, auth_tuple->value->cstring, 5);
+	text_layer_set_text(auth_layer, "Auth code: %s", auth);
   }
 }
 
@@ -113,32 +105,27 @@ static void window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
 
-  symbol_layer = text_layer_create( //CREATING THE "SYMBOL" LAYER, LATER REPURPOSED FOR SLIDE #/#
+  slide_layer = text_layer_create( //CREATING THE "SLIDE #/#" LAYER
       (GRect) { .origin = { 0, 20 }, .size = { bounds.size.w, 50 } });
-  text_layer_set_text(symbol_layer, "Pebble Presenter"); 
-  text_layer_set_text_alignment(symbol_layer, GTextAlignmentCenter); 
-  text_layer_set_font(symbol_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
-  layer_add_child(window_layer, text_layer_get_layer(symbol_layer));
+  text_layer_set_text(slide_layer, "Pebble Presenter"); 
+  text_layer_set_text_alignment(slide_layer, GTextAlignmentCenter); 
+  text_layer_set_font(slide_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
+  layer_add_child(window_layer, text_layer_get_layer(slide_layer));
 
-  price_layer = text_layer_create( //CREATING THE "PRICE" LAYER, LATER REPURPOSED FOR AUTH CODE
+  auth_layer = text_layer_create( //CREATING THE "AUTH" LAYER
       (GRect) { .origin = { 0, 75 }, .size = { bounds.size.w, 50 } });
-  text_layer_set_text(price_layer, "Retrieving auth code");
-  text_layer_set_text_alignment(price_layer, GTextAlignmentCenter);
-  text_layer_set_font(price_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
-  layer_add_child(window_layer, text_layer_get_layer(price_layer));
+  text_layer_set_text(auth_layer, "Retrieving auth code");
+  text_layer_set_text_alignment(auth_layer, GTextAlignmentCenter);
+  text_layer_set_font(auth_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
+  layer_add_child(window_layer, text_layer_get_layer(auth_layer));
 
-  //TODO: write a function that sends an empty id, waits for return
-  //char[] auth = return with auth code
-  //write auth to screen
-
-  text_layer_set_text(price_layer, "Auth code: ####");
-
-  //here, request total_slide
+  set_auth(&auth);
+  set_slide(0);
 }
 
 static void window_unload(Window *window) {
-  text_layer_destroy(symbol_layer);
-  text_layer_destroy(price_layer);
+  text_layer_destroy(slide_layer);
+  text_layer_destroy(auth_layer);
 }
 
 static void init(void) {

@@ -79,7 +79,7 @@ void display_Slides(void){
   char cur_slide_str[33]; itoa(current_slide,cur_slide_str);
   char tot_slide_str[33]; itoa(total_slide,tot_slide_str);
 
-  char* displayslide = malloc(strlen("Slide ")+strlen(cur_slide_str)+strlen(tot_slide_str)+2);//JANKY, PROBABLY NEEDS FIXING
+  char* displayslide = malloc(strlen("Slide ")+strlen(cur_slide_str)+strlen(tot_slide_str)+3);//JANKY, PROBABLY NEEDS FIXING
   strcpy(displayslide,"Slide "); strcat(displayslide,cur_slide_str); strcat(displayslide,"/"); strcat(displayslide,tot_slide_str);
   displayslide[strlen(displayslide)-1] = '\0';
 
@@ -126,7 +126,7 @@ static void in_received_handler(DictionaryIterator *iter, void *context) {//reci
   if (auth_tuple) {
     strncpy(auth, auth_tuple->value->cstring, 5);
 
-	char* displayauth = malloc(strlen("Auth code: ")+strlen(auth)+1);//JANKY, PROBABLY NEEDS FIXING
+	char* displayauth = malloc(strlen("Auth code: ")+strlen(auth)+2);//JANKY, PROBABLY NEEDS FIXING
 	strcpy(displayauth,"Auth code: "); strcat(displayauth,auth);
 	displayauth[strlen(displayauth)-1] = '\0';
 

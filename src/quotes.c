@@ -7,6 +7,8 @@ static char auth[5];
 static int total_slide =0;
 static int current_slide=0;
 
+void display_Slides(void);
+
 enum {
   AUTH_KEY = 0x0,
   SLIDE_KEY = 0x1,
@@ -54,9 +56,9 @@ static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
   display_Slides();
 }
 
-static void display_Slides(void){
-  char* cur_slide_str[10]; itoa(current_slide,cur_slide_str,10);
-  char* tot_slide_str[10]; itoa(total_slide,tot_slide_str,10);
+void display_Slides(void){
+  char cur_slide_str[10]; itoa(current_slide,cur_slide_str,10);
+  char tot_slide_str[10]; itoa(total_slide,tot_slide_str,10);
 
   char* displayslide = malloc(strlen("Slide ")+strlen(cur_slide_str)+strlen(tot_slide_str)+2);//JANKY, PROBABLY NEEDS FIXING
   strcpy(displayslide,"Slide "); strcat(displayslide,cur_slide_str); strcat(displayslide,"/"); strcat(displayslide,tot_slide_str);

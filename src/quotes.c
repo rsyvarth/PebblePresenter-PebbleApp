@@ -20,9 +20,7 @@ static void set_symbol_msg(char *symbol) {
   DictionaryIterator *iter;
   app_message_outbox_begin(&iter);
 
-  if (iter == NULL) {
-    return;
-  }
+  if (iter == NULL) {return;}
 
   dict_write_tuplet(iter, &symbol_tuple);
   dict_write_end(iter);
@@ -37,9 +35,7 @@ static void fetch_msg(void) {
   DictionaryIterator *iter;
   app_message_outbox_begin(&iter);
 
-  if (iter == NULL) {
-    return;
-  }
+  if (iter == NULL) {return;}
 
   dict_write_tuplet(iter, &fetch_tuple);
   dict_write_tuplet(iter, &price_tuple);
@@ -50,14 +46,15 @@ static void fetch_msg(void) {
 
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
   // refresh
-  text_layer_set_text(price_layer, "Loading...");
+  text_layer_set_font(symbol_layer, fonts_get_system_font(FONT_KEY_GOTHIC_12));
+  text_layer_set_text(price_layer, "Retrieving auth code");
   fetch_msg();
 }
 
 static void select_long_click_handler(ClickRecognizerRef recognizer, void *context) {
   // refresh
   entry_get_name(symbol, set_symbol_msg);
-  text_layer_set_text(symbol_layer, "dicking around");
+  text_layer_set_text(symbol_layer, symbol);
   text_layer_set_text(price_layer, "Loading...");
 }
 
@@ -106,14 +103,14 @@ static void window_load(Window *window) {
       (GRect) { .origin = { 0, 20 }, .size = { bounds.size.w, 50 } });
   text_layer_set_text(symbol_layer, "Presenter"); 
   text_layer_set_text_alignment(symbol_layer, GTextAlignmentCenter); 
-  text_layer_set_font(symbol_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28));
+  text_layer_set_font(symbol_layer, fonts_get_system_font(FONT_KEY_GOTHIC_20));
   layer_add_child(window_layer, text_layer_get_layer(symbol_layer));
 
   price_layer = text_layer_create(
       (GRect) { .origin = { 0, 75 }, .size = { bounds.size.w, 50 } });
   text_layer_set_text(price_layer, "Auth code: ####");
   text_layer_set_text_alignment(price_layer, GTextAlignmentCenter);
-  text_layer_set_font(price_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28));
+  text_layer_set_font(price_layer, fonts_get_system_font(FONT_KEY_GOTHIC_20));
   layer_add_child(window_layer, text_layer_get_layer(price_layer));
 
   fetch_msg();

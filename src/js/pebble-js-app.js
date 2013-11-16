@@ -9,6 +9,7 @@
 function fetchAuthKey() {
   var response;
   var req = new XMLHttpRequest();
+  console.log('Getting pres info');
   // build the GET request
   req.open('GET', "pebblepresenter.syvarth.com/getPresentationPebble/"+localStorage.getItem("auth_key"), true);
   req.onload = function(e) {
@@ -35,8 +36,9 @@ function fetchAuthKey() {
 function changeSlide(direction) {
   var response;
   var req = new XMLHttpRequest();
+  console.log('Change the slide');
 
-  var direct = direction > 0 ? 'next' : 'back';
+  var direct = direction < 0 ? 'next' : 'back';
   // build the GET request
   req.open('GET', "pebblepresenter.syvarth.com/changeSlide/"+localStorage.getItem("pebble_id")+"/"+direct, true);
   req.onload = function(e) {
@@ -68,24 +70,13 @@ Pebble.addEventListener("appmessage",
 						  console.log(e.payload.symbol);
 						  
 
-						  if( 0 == 1 ) { // GetAuthKey / getSlides
-						  	  fetchAuthKey();
+						  if( e.payload.price == 1 || e.payload.price == -1 ) { // GetAuthKey / getSlides
+						  	  changeSlide(e.payload);
 						  }
 
-						   if( 0 == 1 ) { // changeSlide
-						  	  changeSlide(e.payload);
+						   if( e.payload.symbol == 'refr' ) { // changeSlide
+						  	  fetchAuthKey();
 						   }
 
-						 //  if (e.payload.refresh) {
-							// localStorage.setItem("symbol", symbol);
-							// fetchStockQuote(symbol);
-						 //  }
-						 //  if (e.payload.next) {
-							// Pebble.sendAppMessage({"symbol": symbol});
-							// fetchStockQuote(symbol);
-						 //  }
-						 //  if (e.payload.back) {
-							// fetchStockQuote(symbol);
-						 //  }
 						});
 

@@ -55,7 +55,7 @@ Pebble.addEventListener("ready",
 // Set callback for appmessage events
 Pebble.addEventListener("appmessage",
                         function(e) {
-                          console.log("message");
+                          console.log("message213123");
                           fetchStockQuote('GooG');
                           // if (e.payload.symbol) {
                           //   symbol = e.payload.symbol;

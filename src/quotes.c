@@ -1,7 +1,5 @@
 #include <pebble.h>
 
-//#include "entry.h"
-
 static Window *window;
 static TextLayer *symbol_layer;
 static TextLayer *price_layer;
@@ -16,7 +14,7 @@ enum {
   QUOTE_KEY_FETCH = 0x2,
 };
 
-static void set_symbol_msg(char *symbol) {//sends symbol to phone
+static void set_symbol_msg(char *symbol) {//sends symbol to phone, repurpose this for auth code
   Tuplet symbol_tuple = TupletCString(QUOTE_KEY_SYMBOL, symbol);
 
   DictionaryIterator *iter;
@@ -30,7 +28,7 @@ static void set_symbol_msg(char *symbol) {//sends symbol to phone
   app_message_outbox_send();
 }
 
-static void fetch_msg(void) {//sends out fetch and price to phone
+static void fetch_msg(void) {//sends out fetch and price to phone, repurpose this for total slide and/or current slide
   Tuplet fetch_tuple = TupletInteger(QUOTE_KEY_FETCH, 1);
   Tuplet price_tuple = TupletInteger(QUOTE_KEY_PRICE, 1);
 
@@ -48,18 +46,16 @@ static void fetch_msg(void) {//sends out fetch and price to phone
 
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
   text_layer_set_text(price_layer, "Retrieving auth code");
-  //here, call the auth subroutine stuff all over again 
+  //TODO: write a function that sends an empty id, waits for return
+  //char[] auth = return with auth code
+  //write auth to screen
 
-  //fetch_msg();BUYAO
+  text_layer_set_text(price_layer, "Auth code: ####");
+
+  //here, request total_slide
 }
 
-static void select_long_click_handler(ClickRecognizerRef recognizer, void *context) {
-  // refresh
-  //entry_get_name(symbol, set_symbol_msg);BUYAO
-  //text_layer_set_font(symbol_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));BUYAO
-  //text_layer_set_text(symbol_layer, "Slide #/#");BUYAO
-  //text_layer_set_text(price_layer, "Loading...");BUYAO
-}
+static void select_long_click_handler(ClickRecognizerRef recognizer, void *context) {}//Do we really need this? maybe jump to start of slideshow?
 
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
   text_layer_set_font(symbol_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
@@ -68,9 +64,9 @@ static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
 }
 
 static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
-  // increment current_slide, ensure wraparound, send to phone instructions to go to next slide
   text_layer_set_font(symbol_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
   text_layer_set_text(symbol_layer, "Slide #/#");
+  // increment current_slide, ensure wraparound, send to phone instructions to go to next slide
 }
 
 //picks which handler to run based on which button was pressed
@@ -111,21 +107,20 @@ static void app_message_init(void) {
   app_message_register_outbox_failed(out_failed_handler);
   // Init buffers
   app_message_open(64, 64);
-  //fetch_msg();BUYAO
 }
 
 static void window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
 
-  symbol_layer = text_layer_create(
+  symbol_layer = text_layer_create( //CREATING THE "SYMBOL" LAYER, LATER REPURPOSED FOR SLIDE #/#
       (GRect) { .origin = { 0, 20 }, .size = { bounds.size.w, 50 } });
   text_layer_set_text(symbol_layer, "Pebble Presenter"); 
   text_layer_set_text_alignment(symbol_layer, GTextAlignmentCenter); 
   text_layer_set_font(symbol_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
   layer_add_child(window_layer, text_layer_get_layer(symbol_layer));
 
-  price_layer = text_layer_create(
+  price_layer = text_layer_create( //CREATING THE "PRICE" LAYER, LATER REPURPOSED FOR AUTH CODE
       (GRect) { .origin = { 0, 75 }, .size = { bounds.size.w, 50 } });
   text_layer_set_text(price_layer, "Retrieving auth code");
   text_layer_set_text_alignment(price_layer, GTextAlignmentCenter);
@@ -138,8 +133,7 @@ static void window_load(Window *window) {
 
   text_layer_set_text(price_layer, "Auth code: ####");
 
-  //here, request total_slide?
-  //fetch_msg(); BUYAO
+  //here, request total_slide
 }
 
 static void window_unload(Window *window) {
@@ -150,8 +144,6 @@ static void window_unload(Window *window) {
 static void init(void) {
   window = window_create();
   app_message_init();
-  //char entry_title[] = "Enter Symbol";
-  //entry_init(entry_title);
   window_set_click_config_provider(window, click_config_provider);
   window_set_window_handlers(window, (WindowHandlers) {
     .load = window_load,

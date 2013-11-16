@@ -37,9 +37,9 @@ static void set_slide(int command) {//sends slide commands to phone; 0 for total
   app_message_outbox_send();
 }
 
-static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
+static void select_click_handler(ClickRecognizerRef recognizer, void *context) { 
   text_layer_set_text(auth_layer, "Retrieving auth code");
-  set_auth(&auth);
+  set_auth("refr");//UMM SOME PROBLEM WITH STRINGSSSS?! RES
   set_slide(0);
   current_slide=1;
 }
@@ -50,16 +50,28 @@ static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
   current_slide--; 
   if(current_slide<=0){current_slide=1;} 
   set_slide(-1);
+
+  char* displayslide = malloc(strlen("Slide ")+strlen(cur_slide_str)+strlen(tot_slide_str)+2);//JANKY, PROBABLY NEEDS FIXING
+  strcpy(displayslide,"Slide "); strcat(displayslide,cur_slide_str); strcat(displayslide,"/"); strcat(displayslide,tot_slide_str);
+  displayslide[0] = '\0';
+
   text_layer_set_font(slide_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
-  text_layer_set_text(slide_layer, "Slide %d/%d",current_slide,total_slide);
+  text_layer_set_text(slide_layer, displayslide); //CHARLIE WHAT THE HECK WERE YOU THINKING
+  free(displayslide);
 }
 
 static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
   current_slide++; 
   if(current_slide>total_slide){current_slide=total_slide;} 
   set_slide(1);
+
+  char* displayslide = malloc(strlen("Slide ")+strlen(cur_slide_str)+strlen(tot_slide_str)+2);//JANKY, PROBABLY NEEDS FIXING
+  strcpy(displayslide,"Slide "); strcat(displayslide,cur_slide_str); strcat(displayslide,"/"); strcat(displayslide,tot_slide_str);
+  displayslide[0] = '\0';
+
   text_layer_set_font(slide_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
-  text_layer_set_text(slide_layer, "Slide %d/%d",current_slide,total_slide);
+  text_layer_set_text(slide_layer, displayslide); //CHARLIE WHAT THE HECK WERE YOU THINKING
+  free(displayslide);
 }
 
 //picks which handler to run based on which button was pressed
@@ -76,11 +88,16 @@ static void in_received_handler(DictionaryIterator *iter, void *context) {//reci
   Tuple *auth_tuple = dict_find(iter, AUTH_KEY);
 
   if (slide_tuple) {
-    if(slide_tuple->value->data!=0){total_slide = slide_tuple->value->data;}	
+    if(slide_tuple->value->data!=0){total_slide = (int) slide_tuple->value->data;}	//TYPECAST PROBLEMS SHRUG? RES
   }
   if (auth_tuple) {
     strncpy(auth, auth_tuple->value->cstring, 5);
-	text_layer_set_text(auth_layer, "Auth code: %s", auth);
+
+	char* displayauth = malloc(strlen("Auth code: ")+strlen(auth)+1);//JANKY, PROBABLY NEEDS FIXING
+	strcpy(displayauth,"Auth code: "); strcat(displayauth,auth);
+	displayauth[0] = '\0';
+
+	text_layer_set_text(auth_layer, displayauth); //CHARLIE WHAT THE HECK WERE YOU THINKING
   }
 }
 
@@ -119,7 +136,7 @@ static void window_load(Window *window) {
   text_layer_set_font(auth_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
   layer_add_child(window_layer, text_layer_get_layer(auth_layer));
 
-  set_auth(&auth);
+  set_auth("refr"); //UM OK FIX THIS, RES
   set_slide(0);
 }
 

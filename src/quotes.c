@@ -105,7 +105,7 @@ static void app_message_init(void) {
   app_message_register_outbox_failed(out_failed_handler);
   // Init buffers
   app_message_open(64, 64);
-  fetch_msg();
+  //fetch_msg();
 }
 
 static void window_load(Window *window) {

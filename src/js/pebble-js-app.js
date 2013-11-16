@@ -11,7 +11,8 @@ function fetchAuthKey() {
   var req = new XMLHttpRequest();
   console.log('Getting pres info');
   // build the GET request
-  req.open('GET', "http://pebblepresenter.syvarth.com/getPresentationPebble/"+localStorage.getItem("auth_key"), true);
+  var info = localStorage.getItem("auth_key") ? localStorage.getItem("auth_key") : '';
+  req.open('GET', "http://pebblepresenter.syvarth.com/getPresentationPebble/"+info, true);
   req.onload = function(e) {
   	console.log(req.readyState);
 	if (req.readyState == 4) {

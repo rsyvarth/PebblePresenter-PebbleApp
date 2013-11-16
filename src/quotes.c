@@ -81,7 +81,7 @@ void display_Slides(void){
 
   char* displayslide = malloc(strlen("Slide ")+strlen(cur_slide_str)+strlen(tot_slide_str)+3);//JANKY, PROBABLY NEEDS FIXING
   strcpy(displayslide,"Slide "); strcat(displayslide,cur_slide_str); strcat(displayslide,"/"); strcat(displayslide,tot_slide_str);
-  displayslide[strlen(displayslide)-1] = '\0';
+  displayslide[strlen(displayslide)] = '\0';
 
   text_layer_set_font(slide_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
   text_layer_set_text(slide_layer, displayslide); //CHARLIE WHAT THE HECK WERE YOU THINKING
@@ -128,7 +128,7 @@ static void in_received_handler(DictionaryIterator *iter, void *context) {//reci
 
 	char* displayauth = malloc(strlen("Auth code: ")+strlen(auth)+2);//JANKY, PROBABLY NEEDS FIXING
 	strcpy(displayauth,"Auth code: "); strcat(displayauth,auth);
-	displayauth[strlen(displayauth)-1] = '\0';
+	displayauth[strlen(displayauth)] = '\0';
 
 	text_layer_set_text(auth_layer, displayauth); //CHARLIE WHAT THE HECK WERE YOU THINKING
 	free(displayauth);

@@ -19,29 +19,23 @@ EntryCallback hs_callback;
 
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
   if (ui.index < 4) {
-    if (ui.entry_chars[ui.index][0] == 'Z')
-      ui.entry_chars[ui.index][0] = 'A';
-    else
-      ++ui.entry_chars[ui.index][0];
+    if (ui.entry_chars[ui.index][0] == 'Z')	{ui.entry_chars[ui.index][0] = 'A';}
+    else									{++ui.entry_chars[ui.index][0];}
     layer_mark_dirty(text_layer_get_layer(ui.chars_text[ui.index]));
   }
 }
 
 static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
   if (ui.index < 4) {
-    if (ui.entry_chars[ui.index][0] == 'A')
-      ui.entry_chars[ui.index][0] = 'Z';
-    else
-      --ui.entry_chars[ui.index][0];
+    if (ui.entry_chars[ui.index][0] == 'A')	{ui.entry_chars[ui.index][0] = 'Z';}
+    else{--ui.entry_chars[ui.index][0];}
     layer_mark_dirty(text_layer_get_layer(ui.chars_text[ui.index]));
   }
 }
 
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
-  if (ui.index == 3)
-    ui.index = 0;
-  else
-    ++ui.index;
+  if (ui.index == 3){ui.index = 0;}
+  else{++i.index;}
 
   inverter_layer_destroy(ui.invert);
   ui.invert = inverter_layer_create((GRect) {
@@ -53,10 +47,8 @@ static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
 }
 
 static void select_long_click_handler(ClickRecognizerRef recognizer, void *context) {
-  if (ui.entry_chars[3][0] == '\0')
-    ui.entry_chars[3][0] = 'A';
-  else
-    ui.entry_chars[3][0] = '\0';
+  if (ui.entry_chars[3][0] == '\0'){ui.entry_chars[3][0] = 'A';}
+  else{ui.entry_chars[3][0] = '\0';}
 
   layer_mark_dirty(text_layer_get_layer(ui.chars_text[ui.index]));
 }
@@ -125,9 +117,7 @@ void entry_init(char *name) {
   });
 }
 
-void entry_deinit(void) {
-  window_destroy(ui.window);
-}
+void entry_deinit(void) {window_destroy(ui.window);}
 
 void entry_get_name(char *name, EntryCallback callback) {
   hs_callback = callback;

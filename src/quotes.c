@@ -1,5 +1,4 @@
 #include <pebble.h>
-
 #include "entry.h"
 
 static Window *window;
@@ -20,9 +19,7 @@ static void set_symbol_msg(char *symbol) {
   DictionaryIterator *iter;
   app_message_outbox_begin(&iter);
 
-  if (iter == NULL) {
-    return;
-  }
+  if (iter == NULL) {return;}
 
   dict_write_tuplet(iter, &symbol_tuple);
   dict_write_end(iter);
@@ -31,15 +28,14 @@ static void set_symbol_msg(char *symbol) {
 }
 
 static void fetch_msg(void) {
-  Tuplet fetch_tuple = TupletInteger(QUOTE_KEY_FETCH, 1);
+  Tuplet fetch_tuple = TupletInteger(QUOTE_KEY_FETCH, 1);  //send a message with an empty id, and serverside will send back id, then auth code
+															//busy/wait loop until the id and auth code are recieved; whereupon both are displayed
   Tuplet price_tuple = TupletInteger(QUOTE_KEY_PRICE, 1);
 
   DictionaryIterator *iter;
   app_message_outbox_begin(&iter);
 
-  if (iter == NULL) {
-    return;
-  }
+  if (iter == NULL) {return;}
 
   dict_write_tuplet(iter, &fetch_tuple);
   dict_write_tuplet(iter, &price_tuple);
@@ -95,7 +91,10 @@ static void app_message_init(void) {
   app_message_register_outbox_failed(out_failed_handler);
   // Init buffers
   app_message_open(64, 64);
+  //before fetching message, create text layer with title "Pebble Presenter" or similar and ask user to press select
   fetch_msg();
+  
+
 }
 
 static void window_load(Window *window) {
@@ -104,7 +103,9 @@ static void window_load(Window *window) {
 
   symbol_layer = text_layer_create(
       (GRect) { .origin = { 0, 20 }, .size = { bounds.size.w, 50 } });
-  text_layer_set_text(symbol_layer, "PBL"); text_layer_set_text_alignment(symbol_layer, GTextAlignmentCenter); text_layer_set_font(symbol_layer, fonts_get_system_font(FONT_KEY_BITHAM_42_BOLD));
+  text_layer_set_text(symbol_layer, "PBL"); 
+  text_layer_set_text_alignment(symbol_layer, GTextAlignmentCenter); 
+  text_layer_set_font(symbol_layer, fonts_get_system_font(FONT_KEY_BITHAM_42_BOLD));
   layer_add_child(window_layer, text_layer_get_layer(symbol_layer));
 
   price_layer = text_layer_create(
@@ -125,6 +126,7 @@ static void window_unload(Window *window) {
 static void init(void) {
   window = window_create();
   app_message_init();
+  //INSERT FUNCTION HERE
   char entry_title[] = "Enter Symbol";
   entry_init(entry_title);
   window_set_click_config_provider(window, click_config_provider);
@@ -136,9 +138,7 @@ static void init(void) {
   window_stack_push(window, animated);
 }
 
-static void deinit(void) {
-  window_destroy(window);
-}
+static void deinit(void) {window_destroy(window);}
 
 int main(void) {
   init();

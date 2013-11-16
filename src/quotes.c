@@ -118,7 +118,10 @@ static void in_received_handler(DictionaryIterator *iter, void *context) {//reci
   Tuple *auth_tuple = dict_find(iter, AUTH_KEY);
 
   if (slide_tuple) {
-    if(slide_tuple->value->data!=0){total_slide = (int) slide_tuple->value->data;}	//TYPECAST PROBLEMS SHRUG? RES
+    if(slide_tuple->value->data!=0){
+		total_slide = (int) slide_tuple->value->data;
+		current_slide = 1;
+	}	//TYPECAST PROBLEMS SHRUG? RES
   }
   if (auth_tuple) {
     strncpy(auth, auth_tuple->value->cstring, 5);
@@ -128,6 +131,7 @@ static void in_received_handler(DictionaryIterator *iter, void *context) {//reci
 	displayauth[0] = '\0';
 
 	text_layer_set_text(auth_layer, displayauth); //CHARLIE WHAT THE HECK WERE YOU THINKING
+	free(displayauth);
   }
 }
 

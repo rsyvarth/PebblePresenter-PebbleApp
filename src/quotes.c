@@ -7,7 +7,7 @@ static char auth[5];
 static int total_slide =0;
 static int current_slide=0;
 
-void display_Slides(void);void reverse(char);void itoa(int, char);
+void display_Slides(void);//void reverse(char);void itoa(int, char);
 
 enum {
   AUTH_KEY = 0x0,
@@ -76,8 +76,8 @@ void itoa(int n, char s[]){
 }
 
 void display_Slides(void){
-  char cur_slide_str[33]; itoa(current_slide,cur_slide_str,10);
-  char tot_slide_str[33]; itoa(total_slide,tot_slide_str,10);
+  char cur_slide_str[33]; itoa(current_slide,cur_slide_str);
+  char tot_slide_str[33]; itoa(total_slide,tot_slide_str);
 
   char* displayslide = malloc(strlen("Slide ")+strlen(cur_slide_str)+strlen(tot_slide_str)+2);//JANKY, PROBABLY NEEDS FIXING
   strcpy(displayslide,"Slide "); strcat(displayslide,cur_slide_str); strcat(displayslide,"/"); strcat(displayslide,tot_slide_str);

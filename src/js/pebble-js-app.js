@@ -39,13 +39,8 @@ function changeSlide(direction) {
   var response;
   var req = new XMLHttpRequest();
   console.log('Change the slide');
-  
-  for( var i in direction ) {
-  	console.log('Key - ' + i);
-  console.log(direction[i]);
-}
 
-  var direct = (direction == 1) ? 'next' : 'back';
+  var direct = (direction == -1) ? 'next' : 'back';
   // build the GET request
   req.open('GET', "http://pebblepresenter.syvarth.com/changeSlide/"+localStorage.getItem("pebble_id")+"/"+direct, true);
   req.onload = function(e) {
@@ -72,11 +67,10 @@ Pebble.addEventListener("ready",
 // Set callback for appmessage events
 Pebble.addEventListener("appmessage",
 						function(e) {
-						  console.log("message caught");
+						  console.log("message caught a cold");
 						  console.log(e.payload.price);
 						  console.log(e.payload.symbol);
 						  
-
 						  if( e.payload.price == 1 || e.payload.price == -1 ) { // GetAuthKey / getSlides
 						  	  changeSlide(e.payload.price);
 						  }

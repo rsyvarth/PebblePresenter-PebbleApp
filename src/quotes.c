@@ -30,7 +30,7 @@ static void set_symbol_msg(char *symbol) {
   app_message_outbox_send();
 }
 
-static void fetch_msg(void) {
+static void fetch_msg(void) {//sends out current 
   Tuplet fetch_tuple = TupletInteger(QUOTE_KEY_FETCH, 1);
   Tuplet price_tuple = TupletInteger(QUOTE_KEY_PRICE, 1);
 
@@ -61,11 +61,11 @@ static void select_long_click_handler(ClickRecognizerRef recognizer, void *conte
 }
 
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
-  // do nothing for now
+  // decrement current_slide, ensure wraparound, send to phone instructions to go back one slide, 
 }
 
 static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
-  // do nothing for now
+  // increment current_slide, ensure wraparound, send to phone instructions to go to next slide
 }
 
 static void click_config_provider(void *context) {
@@ -116,7 +116,7 @@ static void window_load(Window *window) {
       (GRect) { .origin = { 0, 20 }, .size = { bounds.size.w, 50 } });
   text_layer_set_text(symbol_layer, "Pebble Presenter"); 
   text_layer_set_text_alignment(symbol_layer, GTextAlignmentCenter); 
-  text_layer_set_font(symbol_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
+  text_layer_set_font(symbol_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
   layer_add_child(window_layer, text_layer_get_layer(symbol_layer));
 
   price_layer = text_layer_create(
@@ -126,10 +126,13 @@ static void window_load(Window *window) {
   text_layer_set_font(price_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
   layer_add_child(window_layer, text_layer_get_layer(price_layer));
 
-  //char[] auth = //call auth function with empty id, return with auth code
+  //TODO: write a function that sends an empty id, waits for return
+  //char[] auth = return with auth code
+  //write auth to screen
 
   text_layer_set_text(price_layer, "Auth code: ####");
 
+  //here, request total_slide?
   fetch_msg();
 }
 
@@ -141,8 +144,8 @@ static void window_unload(Window *window) {
 static void init(void) {
   window = window_create();
   app_message_init();
-  char entry_title[] = "Enter Symbol";
-  entry_init(entry_title);
+  //char entry_title[] = "Enter Symbol";
+  //entry_init(entry_title);
   window_set_click_config_provider(window, click_config_provider);
   window_set_window_handlers(window, (WindowHandlers) {
     .load = window_load,
@@ -152,9 +155,7 @@ static void init(void) {
   window_stack_push(window, animated);
 }
 
-static void deinit(void) {
-  window_destroy(window);
-}
+static void deinit(void) {window_destroy(window);}
 
 int main(void) {
   init();

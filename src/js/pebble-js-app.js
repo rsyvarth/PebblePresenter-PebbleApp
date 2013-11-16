@@ -11,7 +11,7 @@ function fetchAuthKey() {
   var req = new XMLHttpRequest();
   console.log('Getting pres info');
   // build the GET request
-  req.open('GET', "pebblepresenter.syvarth.com/getPresentationPebble/"+localStorage.getItem("auth_key"), true);
+  req.open('GET', "http://pebblepresenter.syvarth.com/getPresentationPebble/"+localStorage.getItem("auth_key"), true);
   req.onload = function(e) {
 	if (req.readyState == 4) {
 	  // 200 - HTTP OK
@@ -40,7 +40,7 @@ function changeSlide(direction) {
 
   var direct = direction < 0 ? 'next' : 'back';
   // build the GET request
-  req.open('GET', "pebblepresenter.syvarth.com/changeSlide/"+localStorage.getItem("pebble_id")+"/"+direct, true);
+  req.open('GET', "http://pebblepresenter.syvarth.com/changeSlide/"+localStorage.getItem("pebble_id")+"/"+direct, true);
   req.onload = function(e) {
 	if (req.readyState == 4) {
 	  // 200 - HTTP OK

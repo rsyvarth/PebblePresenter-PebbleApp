@@ -21,11 +21,11 @@ function fetchAuthKey() {
 		console.log(req.responseText);
 		response = JSON.parse(req.responseText);
 		if (response.auth_key) {
-		    Pebble.sendAppMessage({key: response.auth_key});
+		    Pebble.sendAppMessage({symbol: response.auth_key});
 		    localStorage.setItem("auth_key", response.auth_key);
 		    localStorage.setItem("pebble_id", response.pebble_id);
 		} else if( response.pres_id ) {
-			Pebble.sendAppMessage({key: 10});//Number of slides
+			Pebble.sendAppMessage({symbol: 10});//Number of slides
 		}
 	  } else {
 		console.log("Request returned error code " + req.status.toString());
@@ -48,7 +48,7 @@ function changeSlide(direction) {
 	  // 200 - HTTP OK
 	  if(req.status == 200) {
 		console.log(req.responseText);
-		Pebble.sendAppMessage({key: 0});
+		Pebble.sendAppMessage({price: 0});
 	  } else {
 		console.log("Request returned error code " + req.status.toString());
 	  }

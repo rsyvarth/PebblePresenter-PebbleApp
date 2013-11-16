@@ -118,7 +118,7 @@ static void in_received_handler(DictionaryIterator *iter, void *context) {//reci
   Tuple *auth_tuple = dict_find(iter, AUTH_KEY);
 
   if (slide_tuple) {
-    if(slide_tuple->value->data>0){
+    if(slide_tuple->value->data > 0){
 		total_slide = (int) slide_tuple->value->data;
 		current_slide = 1;
 	}	//TYPECAST PROBLEMS SHRUG? RES

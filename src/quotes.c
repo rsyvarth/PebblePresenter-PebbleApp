@@ -7,6 +7,8 @@ static TextLayer *symbol_layer;
 static TextLayer *price_layer;
 static char symbol[5];
 static char price[10];
+static int total_slide;
+static int current_slide;
 
 enum {
   QUOTE_KEY_SYMBOL = 0x0,
@@ -58,9 +60,20 @@ static void select_long_click_handler(ClickRecognizerRef recognizer, void *conte
   text_layer_set_text(price_layer, "Loading...");
 }
 
+static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
+  // do nothing for now
+}
+
+static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
+  // do nothing for now
+}
+
 static void click_config_provider(void *context) {
+  const uint16_t repeat_interval_ms = 100;
   window_single_click_subscribe(BUTTON_ID_SELECT, select_click_handler);
   window_long_click_subscribe(BUTTON_ID_SELECT, 0, select_long_click_handler, NULL);
+  window_single_repeating_click_subscribe(BUTTON_ID_UP, repeat_interval_ms, up_click_handler);
+  window_single_repeating_click_subscribe(BUTTON_ID_DOWN, repeat_interval_ms, down_click_handler);
 }
 
 static void in_received_handler(DictionaryIterator *iter, void *context) {
@@ -108,10 +121,14 @@ static void window_load(Window *window) {
 
   price_layer = text_layer_create(
       (GRect) { .origin = { 0, 75 }, .size = { bounds.size.w, 50 } });
-  text_layer_set_text(price_layer, "Auth code: ####");
+  text_layer_set_text(price_layer, "Retrieving auth code");
   text_layer_set_text_alignment(price_layer, GTextAlignmentCenter);
   text_layer_set_font(price_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
   layer_add_child(window_layer, text_layer_get_layer(price_layer));
+
+  //char[] auth = //call auth function with empty id, return with auth code
+
+  text_layer_set_text(price_layer, "Auth code: ####");
 
   fetch_msg();
 }

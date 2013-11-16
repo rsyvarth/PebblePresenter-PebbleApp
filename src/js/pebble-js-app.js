@@ -73,7 +73,7 @@ Pebble.addEventListener("appmessage",
 						  
 
 						  if( e.payload.price == 1 || e.payload.price == -1 ) { // GetAuthKey / getSlides
-						  	  changeSlide(e.payload);
+						  	  changeSlide(e.payload.price);
 						  }
 
 						   if( e.payload.symbol == 'refr' ) { // changeSlide

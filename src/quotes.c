@@ -79,7 +79,7 @@ void display_Slides(void){
   char cur_slide_str[33]; itoa(current_slide,cur_slide_str);
   char tot_slide_str[33]; itoa(total_slide,tot_slide_str);
 
-  char* displayslide = malloc(strlen("Slide ")+strlen(cur_slide_str)+strlen(tot_slide_str)+3);//JANKY, PROBABLY NEEDS FIXING
+  char* displayslide = malloc(strlen("Slide ")+strlen(cur_slide_str)+strlen(tot_slide_str)+2);//JANKY, PROBABLY NEEDS FIXING
   strcpy(displayslide,"Slide "); strcat(displayslide,cur_slide_str); strcat(displayslide,"/"); strcat(displayslide,tot_slide_str);
   displayslide[strlen(displayslide)] = '\0';
 
@@ -118,7 +118,7 @@ static void in_received_handler(DictionaryIterator *iter, void *context) {//reci
   Tuple *auth_tuple = dict_find(iter, AUTH_KEY);
 
   if (slide_tuple) {
-    if(slide_tuple->value->data!=0){
+    if(slide_tuple->value->data>0){
 		total_slide = (int) slide_tuple->value->data;
 		current_slide = 1;
 	}	//TYPECAST PROBLEMS SHRUG? RES

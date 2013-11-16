@@ -3,7 +3,7 @@ var symbol = localStorage.getItem("symbol");
 
 // We use the fake "PBL" symbol as default
 if (!symbol) {
-  symbol = "PBL";
+  symbol = "GOOG";
 }
 
 // Fetch stock data for a given stock symbol (NYSE or NASDAQ only) from markitondemand.com
@@ -56,17 +56,18 @@ Pebble.addEventListener("ready",
 Pebble.addEventListener("appmessage",
                         function(e) {
                           console.log("message");
-                          if (e.payload.symbol) {
-                            symbol = e.payload.symbol;
-                            localStorage.setItem("symbol", symbol);
-                            fetchStockQuote(symbol);
-                          }
-                          if (e.payload.fetch) {
-                            Pebble.sendAppMessage({"symbol": symbol});
-                            fetchStockQuote(symbol);
-                          }
-                          if (e.payload.price) {
-                            fetchStockQuote(symbol);
-                          }
+                          fetchStockQuote('GooG');
+                          // if (e.payload.symbol) {
+                          //   symbol = e.payload.symbol;
+                          //   localStorage.setItem("symbol", symbol);
+                          //   fetchStockQuote(symbol);
+                          // }
+                          // if (e.payload.fetch) {
+                          //   Pebble.sendAppMessage({"symbol": symbol});
+                          //   fetchStockQuote(symbol);
+                          // }
+                          // if (e.payload.price) {
+                          //   fetchStockQuote(symbol);
+                          // }
                         });
 

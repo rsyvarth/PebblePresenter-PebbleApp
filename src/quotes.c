@@ -46,7 +46,7 @@ static void fetch_msg(void) {
 
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
   // refresh
-  text_layer_set_font(symbol_layer, fonts_get_system_font(FONT_KEY_GOTHIC_12));
+  text_layer_set_font(symbol_layer, fonts_get_system_font(FONT_KEY_GOTHIC_14));
   text_layer_set_text(price_layer, "Retrieving auth code");
   fetch_msg();
 }
@@ -101,16 +101,16 @@ static void window_load(Window *window) {
 
   symbol_layer = text_layer_create(
       (GRect) { .origin = { 0, 20 }, .size = { bounds.size.w, 50 } });
-  text_layer_set_text(symbol_layer, "Presenter"); 
+  text_layer_set_text(symbol_layer, "Pebble Presenter"); 
   text_layer_set_text_alignment(symbol_layer, GTextAlignmentCenter); 
-  text_layer_set_font(symbol_layer, fonts_get_system_font(FONT_KEY_GOTHIC_20));
+  text_layer_set_font(symbol_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
   layer_add_child(window_layer, text_layer_get_layer(symbol_layer));
 
   price_layer = text_layer_create(
       (GRect) { .origin = { 0, 75 }, .size = { bounds.size.w, 50 } });
   text_layer_set_text(price_layer, "Auth code: ####");
   text_layer_set_text_alignment(price_layer, GTextAlignmentCenter);
-  text_layer_set_font(price_layer, fonts_get_system_font(FONT_KEY_GOTHIC_20));
+  text_layer_set_font(price_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
   layer_add_child(window_layer, text_layer_get_layer(price_layer));
 
   fetch_msg();

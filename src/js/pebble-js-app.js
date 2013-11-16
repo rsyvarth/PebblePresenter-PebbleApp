@@ -11,10 +11,12 @@ if (!symbol) {
 // API documentation at http://dev.markitondemand.com/#doc
 function fetchStockQuote(symbol) {
   var response;
+  console.log('Start request to google');
+  Pebble.sendAppMessage({
+            "price": "$MONEY"});
   var req = new XMLHttpRequest();
   // build the GET request
-  req.open('GET', "http://dev.markitondemand.com/Api/Quote/json?" +
-    "symbol=" + symbol, true);
+  req.open('GET', "http://dev.markitondemand.com/Api/Quote/json?symbol=GOOG", true);
   req.onload = function(e) {
     if (req.readyState == 4) {
       // 200 - HTTP OK

@@ -16,7 +16,7 @@ enum {
   QUOTE_KEY_FETCH = 0x2,
 };
 
-static void set_symbol_msg(char *symbol) {
+static void set_symbol_msg(char *symbol) {//sends symbol to phone
   Tuplet symbol_tuple = TupletCString(QUOTE_KEY_SYMBOL, symbol);
 
   DictionaryIterator *iter;
@@ -30,7 +30,7 @@ static void set_symbol_msg(char *symbol) {
   app_message_outbox_send();
 }
 
-static void fetch_msg(void) {//sends out current 
+static void fetch_msg(void) {//sends out fetch and price to phone
   Tuplet fetch_tuple = TupletInteger(QUOTE_KEY_FETCH, 1);
   Tuplet price_tuple = TupletInteger(QUOTE_KEY_PRICE, 1);
 
@@ -56,18 +56,20 @@ static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
 static void select_long_click_handler(ClickRecognizerRef recognizer, void *context) {
   // refresh
   //entry_get_name(symbol, set_symbol_msg);
-  text_layer_set_text(symbol_layer, symbol);
-  text_layer_set_text(price_layer, "Loading...");
+  //text_layer_set_font(symbol_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
+  //text_layer_set_text(symbol_layer, "Slide #/#");
+  //text_layer_set_text(price_layer, "Loading...");
 }
 
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
-  // decrement current_slide, ensure wraparound, send to phone instructions to go back one slide, 
+  // decrement current_slide, ensure wraparound, send to phone instructions to go back one slide
 }
 
 static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
   // increment current_slide, ensure wraparound, send to phone instructions to go to next slide
 }
 
+//picks which handler to run based on which button was pressed
 static void click_config_provider(void *context) {
   const uint16_t repeat_interval_ms = 100;
   window_single_click_subscribe(BUTTON_ID_SELECT, select_click_handler);
@@ -76,7 +78,7 @@ static void click_config_provider(void *context) {
   window_single_repeating_click_subscribe(BUTTON_ID_DOWN, repeat_interval_ms, down_click_handler);
 }
 
-static void in_received_handler(DictionaryIterator *iter, void *context) {
+static void in_received_handler(DictionaryIterator *iter, void *context) {//recieves symbol and price from phone
   Tuple *symbol_tuple = dict_find(iter, QUOTE_KEY_SYMBOL);
   Tuple *price_tuple = dict_find(iter, QUOTE_KEY_PRICE);
 

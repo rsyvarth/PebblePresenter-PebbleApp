@@ -64,8 +64,8 @@ Pebble.addEventListener("ready",
 Pebble.addEventListener("appmessage",
 						function(e) {
 						  console.log("message caught");
-						  console.log(e.payload.auth);
-						  console.log(e.payload.command);
+						  console.log(e.payload[0]);
+						  console.log(e.payload[1]);
 
 						  if( 0 == 1 ) { // GetAuthKey / getSlides
 						  	  fetchAuthKey();

@@ -39,6 +39,8 @@ enum {
 
 static void out_sent_handler(DictionaryIterator *sent, void *context) {
   // outgoing message was delivered
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "Message to phone sent");
+
 }
 
 void out_failed_handler(DictionaryIterator *failed, AppMessageResult reason, void *context) {
@@ -52,9 +54,9 @@ static void in_received_handler(DictionaryIterator *iter, void *context) {
 
   APP_LOG(APP_LOG_LEVEL_DEBUG, "incoming message from Pebble");
 
-  if (time_tuple) {
-    clock_time = (int) strtol(time_tuple->value->cstring, (char **)NULL, 10);
-  }
+  // if (time_tuple) {
+  //   clock_time = (int) strtol(time_tuple->value->cstring, (char **)NULL, 10);
+  // }
   // if (status_tuple) {
   //   strncpy(status, status_tuple->value->cstring, sizeof(status));
   //   //text_layer_set_text(status_layer, status);
@@ -75,6 +77,8 @@ void in_dropped_handler(AppMessageResult reason, void *context) {
 }
 
 void send_request(char *request) {
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "Sending request to phone");
+
   Tuplet request_tuple = TupletCString(KEY_REQUEST, request);
 
   DictionaryIterator *iter;

@@ -111,8 +111,8 @@ static void click_config_provider(void *context) {
   window_single_repeating_click_subscribe(BUTTON_ID_UP, repeat_interval_ms, up_single_click_handler);
   window_single_repeating_click_subscribe(BUTTON_ID_DOWN, repeat_interval_ms, down_single_click_handler);
   window_single_repeating_click_subscribe(BUTTON_ID_SELECT, repeat_interval_ms, select_single_click_handler);
-  window_long_click_subscribe(BUTTON_ID_UP, 700, up_long_click_handler, NULL);
-  window_long_click_subscribe(BUTTON_ID_DOWN, 700, down_long_click_handler, NULL);
+  // window_long_click_subscribe(BUTTON_ID_UP, 700, up_long_click_handler, NULL);
+  // window_long_click_subscribe(BUTTON_ID_DOWN, 700, down_long_click_handler, NULL);
 }
 
 static void window_load(Window *window) {

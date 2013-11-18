@@ -49,14 +49,14 @@ void out_failed_handler(DictionaryIterator *failed, AppMessageResult reason, voi
 
 static void in_received_handler(DictionaryIterator *iter, void *context) {
   Tuple *auth_tuple = dict_find(iter, KEY_AUTH);
-  //Tuple *time_tuple = dict_find(iter, KEY_TIME);
+  Tuple *time_tuple = dict_find(iter, KEY_TIME);
 
 
   APP_LOG(APP_LOG_LEVEL_DEBUG, "incoming message from Pebble");
 
-  // if (time_tuple) {
-  //   clock_time = (int) strtol(time_tuple->value->cstring, (char **)NULL, 10);
-  // }
+  if (time_tuple) {
+    clock_time = (int) strtol(time_tuple->value->cstring, (char **)NULL, 10);
+  }
   // if (status_tuple) {
   //   strncpy(status, status_tuple->value->cstring, sizeof(status));
   //   //text_layer_set_text(status_layer, status);

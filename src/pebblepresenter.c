@@ -122,12 +122,12 @@ static void click_config_provider(void *context) {
 }
 
 static void timer_callback(void *context) {
-  char textTime[30];
+  char textTime[60];
   
   clock_time = clock_time - clock_timeout;
 
   sprintf(textTime, "%d", clock_time);
-  text_layer_set_text(slide_timer_layer, textTime);
+  //text_layer_set_text(slide_timer_layer, textTime);
   
   app_timer_register(clock_timeout_const, timer_callback, NULL);
 }

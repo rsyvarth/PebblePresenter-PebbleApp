@@ -3,7 +3,7 @@
   "shortName": "Pebble Presenter",
   "longName": "Pebble Presenter",
   "companyName": "None",
-  "versionCode": 2,
+  "versionCode": 1,
   "versionLabel": "1.0.0",
   "watchapp": {
     "watchface": false
@@ -11,7 +11,7 @@
   "appKeys": {
     "request": 0,
     "next": 1,
-    "previous": 2,
+    "previous": 2
   },
   "resources": {
     "media": []

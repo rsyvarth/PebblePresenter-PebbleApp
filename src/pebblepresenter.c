@@ -20,7 +20,7 @@ static TextLayer *auth_text_layer;
 static TextLayer *auth_layer;
 
 static char title[30] = "Pebble Presenter";
-static char timer_text[20] = "0";
+static char timer_text[20] = "0:00";
 // static char status[8] = "Unknown";
 static char auth_text[] = "Auth Code:";
 static char auth[5] = "   ";

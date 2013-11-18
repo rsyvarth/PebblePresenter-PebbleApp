@@ -2,6 +2,18 @@ var maxTriesForSendingAppMessage = 3;
 var timeoutForAppMessageRetry = 3000;
 var timeoutForRequest = 20000;
 
+var slides = [
+	{ time: 20 },
+	{ time: 30 },
+	{ time: 40 },
+	{ time: 50 },
+	{ time: 60 },
+	{ time: 70 },
+	{ time: 80 }
+];
+
+var currSlide = 0;
+
 function sendAppMessage(message, numTries, transactionId) {
 	numTries = numTries || 0;
 	if (numTries < maxTriesForSendingAppMessage) {
@@ -47,11 +59,13 @@ function fetchAuthKey( pebble_id, cb ) {
 
 				if( res.pres_id ) {
 					sendAppMessage({
-						'auth': res.auth_key
+						'auth': res.auth_key,
+						'time': slides[ currSlide ].time
 					});
 				} else if( res.auth_key ) {
 					sendAppMessage({
-						'auth': res.auth_key
+						'auth': res.auth_key,
+						'time': slides[ currSlide ].time
 					});
 
 					localStorage.setItem("auth_key", res.auth_key);
@@ -102,6 +116,13 @@ function _changeSlide(direction) {
 				console.log( xhr.responseText );
 				res = JSON.parse(xhr.responseText);
 
+				currSlide = direction == 'next' ? currSlide++ : currSlide--;
+				currSlide = currSlide > slides.length ? slides.length : currSlide;
+				currSlide = currSlide < 0 ? 0 : currSlide;
+
+				sendAppMessage({
+					'time': slides[ currSlide ].time
+				});
 			} else {
 				console.log('Request returned error code ' + xhr.status.toString());
 				sendAppMessage({'title': 'Error: ' + xhr.statusText.substring(0,22)});

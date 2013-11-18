@@ -32,10 +32,8 @@ static char timerText[30];
 
 
 enum {
-  KEY_REQUEST,
-  KEY_TITLE,
-  KEY_STATUS,
   KEY_AUTH,
+  KEY_TIME
 };
 
 static void out_sent_handler(DictionaryIterator *sent, void *context) {
@@ -47,15 +45,14 @@ void out_failed_handler(DictionaryIterator *failed, AppMessageResult reason, voi
 }
 
 static void in_received_handler(DictionaryIterator *iter, void *context) {
-  Tuple *title_tuple = dict_find(iter, KEY_TITLE);
-  //Tuple *status_tuple = dict_find(iter, KEY_STATUS);
   Tuple *auth_tuple = dict_find(iter, KEY_AUTH);
+  Tuple *time_tuple = dict_find(iter, KEY_TIME);
+
 
   APP_LOG(APP_LOG_LEVEL_DEBUG, "incoming message from Pebble");
 
-  if (title_tuple) {
-    strncpy(title, title_tuple->value->cstring, sizeof(title));
-    text_layer_set_text(title_layer, title);
+  if (time_tuple) {
+    clock_time = time_tuple->value;
   }
   // if (status_tuple) {
   //   strncpy(status, status_tuple->value->cstring, sizeof(status));
@@ -164,10 +161,11 @@ static void timer_callback(void *context) {
   clock_time = clock_time - 1;
 
   if( clock_time == 11 || clock_time == 10 ) {
-    vibes_short_pulse();
+    vibes_short_pulse(); //Warning pulse
   } else if( clock_time == 1 ) {
-    vibes_long_pulse();
-    clock_time = 20;
+    vibes_long_pulse(); //Time is up
+  } else if( clock_time <= 0 ) {
+    clock_time = 0;//Don't let things get negative
   }
 
   int min = clock_time / 60;

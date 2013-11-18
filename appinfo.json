@@ -9,10 +9,8 @@
 		"watchface": false
 	},
 	"appKeys": {
-		"request": 0,
-		"next": 1,
-		"previous": 2,
-		"auth": 3
+		"auth": 0,
+		"time": 1
 	},
 	"resources": {
 		"media": [

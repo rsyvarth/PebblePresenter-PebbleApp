@@ -88,14 +88,17 @@ void send_request(char *request) {
 
 static void up_single_click_handler(ClickRecognizerRef recognizer, void *context) {
   send_request("next");
+  vibes_short_pulse();
 }
 
 static void down_single_click_handler(ClickRecognizerRef recognizer, void *context) {
   send_request("prev");
+  vibes_double_pulse();
 }
 
 static void select_single_click_handler(ClickRecognizerRef recognizer, void *context) {
   send_request("refresh");
+  vibes_long_pulse();
 }
 
 // static void up_long_click_handler(ClickRecognizerRef recognizer, void *context) {

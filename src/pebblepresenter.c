@@ -172,10 +172,11 @@ static void timer_callback(void *context) {
 
   int min = clock_time % 60;
   int sec = clock_time - (min * 60);
-  
+
   itoa(min, timerText);
   strcat(timerText, ":");
-  strcat(timerText, sec);
+  itoa(min, tmp);
+  strcat(timerText, tmp);
 
   // APP_LOG(APP_LOG_LEVEL_DEBUG, "timer hit");
   // APP_LOG(APP_LOG_LEVEL_DEBUG, timerText);

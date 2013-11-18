@@ -20,8 +20,8 @@ static TextLayer *auth_text_layer;
 static TextLayer *auth_layer;
 
 static char title[30] = "Presenter";
-static char status_text[] = "Status:";
-static char status[8] = "Unknown";
+// static char status_text[] = "Status:";
+// static char status[8] = "Unknown";
 static char auth_text[] = "Auth Code:";
 static char auth[5] = "   ";
 

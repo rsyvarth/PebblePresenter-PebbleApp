@@ -23,7 +23,7 @@ static char title[30] = "Presenter";
 static char status_text[] = "Status:";
 static char status[8] = "Unknown";
 static char auth_text[] = "Auth Code:";
-static char auth[5] = "----";
+static char auth[5] = "   ";
 
 enum {
   KEY_REQUEST,
@@ -96,6 +96,8 @@ static void down_single_click_handler(ClickRecognizerRef recognizer, void *conte
 
 static void select_single_click_handler(ClickRecognizerRef recognizer, void *context) {
   send_request("refresh");
+  auth = '----';
+  text_layer_set_text(auth_layer, auth);
 }
 
 static void up_long_click_handler(ClickRecognizerRef recognizer, void *context) {

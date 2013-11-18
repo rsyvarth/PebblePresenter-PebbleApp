@@ -24,6 +24,7 @@ static char timer_text[20] = "0";
 // static char status[8] = "Unknown";
 static char auth_text[] = "Auth Code:";
 static char auth[5] = "   ";
+static uint32_t clock_timeout_const = 1000;
 static int clock_timeout = 1000;
 static int clock_time = 60000;
 
@@ -128,7 +129,7 @@ static void timer_callback(void *context) {
   sprintf(textTime, "%d", clock_time);
   text_layer_set_text(slide_timer_layer, textTime);
   
-  app_timer_register(clock_timeout, timer_callback, NULL);
+  app_timer_register(clock_timeout_const, timer_callback, NULL);
 }
 
 static void window_load(Window *window) {
@@ -217,7 +218,7 @@ static void init(void) {
   text_layer_set_text(auth_text_layer, auth_text);
   text_layer_set_text(auth_layer, auth);
 
-  app_timer_register(clock_timeout, timer_callback, NULL);
+  app_timer_register(clock_timeout_const, timer_callback, NULL);
 
   send_request("refresh");
 }

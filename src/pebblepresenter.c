@@ -25,9 +25,10 @@ static char timer_text[20] = "0";
 static char auth_text[] = "Auth Code:";
 static char auth[5] = "   ";
 const  uint32_t clock_timeout_const = 1000;
-static int clock_timeout = 1000;
-static int clock_time = 60000;
-static char timerText[60];
+//static int clock_timeout = 1;
+static int clock_time = 90;
+static char timerText[30];
+
 
 
 enum {
@@ -161,12 +162,20 @@ void itoa(int n, char s[]){
 //-----------------------------------
 
 static void timer_callback(void *context) { 
-  clock_time = clock_time - clock_timeout;
+  char tmp[10];
+
+  clock_time = clock_time - 1;
 
   if( clock_time < 0 ) {
-    clock_time = 6000;
+    clock_time = 90;
   }
-  itoa(clock_time, timerText);
+
+  int min = clock_time % 60;
+  int sec = clock_time - (min * 60);
+  
+  itoa(min, timerText);
+  strcat(timerText, ":");
+  strcat(timerText, sec);
 
   // APP_LOG(APP_LOG_LEVEL_DEBUG, "timer hit");
   // APP_LOG(APP_LOG_LEVEL_DEBUG, timerText);

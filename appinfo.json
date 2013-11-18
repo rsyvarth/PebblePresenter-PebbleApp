@@ -12,7 +12,7 @@
 		"request": 0,
 		"next": 1,
 		"previous": 2,
-		"auth": 2
+		"auth": 3
 	},
 	"resources": {
 		"media": [

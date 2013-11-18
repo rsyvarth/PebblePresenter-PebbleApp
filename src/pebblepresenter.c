@@ -45,6 +45,8 @@ static void in_received_handler(DictionaryIterator *iter, void *context) {
   Tuple *status_tuple = dict_find(iter, KEY_STATUS);
   Tuple *auth_tuple = dict_find(iter, KEY_AUTH);
 
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "incoming message from Pebble");
+
   if (title_tuple) {
     strncpy(title, title_tuple->value->cstring, sizeof(title));
     text_layer_set_text(title_layer, title);

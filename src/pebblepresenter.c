@@ -87,24 +87,24 @@ void send_request(char *request) {
 }
 
 static void up_single_click_handler(ClickRecognizerRef recognizer, void *context) {
-  send_request("vol_up");
+  send_request("next");
 }
 
 static void down_single_click_handler(ClickRecognizerRef recognizer, void *context) {
-  send_request("vol_down");
+  send_request("prex");
 }
 
 static void select_single_click_handler(ClickRecognizerRef recognizer, void *context) {
   send_request("refresh");
 }
 
-static void up_long_click_handler(ClickRecognizerRef recognizer, void *context) {
-  send_request("vol_max");
-}
+// static void up_long_click_handler(ClickRecognizerRef recognizer, void *context) {
+//   send_request("vol_max");
+// }
 
-static void down_long_click_handler(ClickRecognizerRef recognizer, void *context) {
-  send_request("vol_min");
-}
+// static void down_long_click_handler(ClickRecognizerRef recognizer, void *context) {
+//   send_request("vol_min");
+// }
 
 static void click_config_provider(void *context) {
   const uint16_t repeat_interval_ms = 1000;

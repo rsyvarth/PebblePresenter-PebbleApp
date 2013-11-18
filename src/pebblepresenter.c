@@ -163,10 +163,11 @@ static void timer_callback(void *context) {
 
   clock_time = clock_time - 1;
 
-  if( clock_time == 10 ) {
-    vibes_double_pulse();
-  } else if( clock_time < 0 ) {
+  if( clock_time == 11 ) {
     vibes_short_pulse();
+    vibes_short_pulse();
+  } else if( clock_time == 1 ) {
+    vibes_long_pulse();
     clock_time = 90;
   }
 

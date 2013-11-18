@@ -176,6 +176,10 @@ static void timer_callback(void *context) {
   itoa(min, timerText);
   strcat(timerText, ":");
   itoa(sec, tmp);
+  //Add the 0 in front of small seconds
+  if( sec < 10 ) {
+   strcat(timerText, "0"); 
+  }
   strcat(timerText, tmp);
 
   // APP_LOG(APP_LOG_LEVEL_DEBUG, "timer hit");

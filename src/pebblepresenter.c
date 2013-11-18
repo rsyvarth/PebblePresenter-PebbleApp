@@ -165,10 +165,12 @@ static void timer_callback(void *context) {
   if( clock_time < 0 ) {
     clock_time = 6000;
   }
-  APP_LOG(APP_LOG_LEVEL_DEBUG, clock_time);
-
-
   itoa(clock_time, timerText);
+
+  APP_LOG(APP_LOG_LEVEL_DEBUG, 'timer');
+  APP_LOG(APP_LOG_LEVEL_DEBUG, timerText);
+
+
   text_layer_set_text(slide_timer_layer, timerText);
   
   app_timer_register(clock_timeout_const, timer_callback, NULL);

@@ -2,6 +2,7 @@
 //By Robert Syvarth
 //Based off of https://github.com/Neal/pebble-vlc-remote
 
+#include <stdio.h>
 #include <pebble.h>
 
 static Window *window;

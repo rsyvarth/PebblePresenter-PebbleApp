@@ -159,9 +159,11 @@ void itoa(int n, char s[]){
 //-----------------------------------
 
 static void timer_callback(void *context) { 
+  char timerText[60];
   clock_time = clock_time - clock_timeout;
 
-  text_layer_set_text(slide_timer_layer, itoa(clock_time));
+  itoa(clock_time, timerText);
+  text_layer_set_text(slide_timer_layer, timerText);
   
   app_timer_register(clock_timeout_const, timer_callback, NULL);
 }

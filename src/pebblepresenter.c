@@ -24,7 +24,7 @@ static char timer_text[20] = "0";
 // static char status[8] = "Unknown";
 static char auth_text[] = "Auth Code:";
 static char auth[5] = "   ";
-static uint32_t clock_timeout_const = 1000;
+const  uint32_t clock_timeout_const = 1000;
 static int clock_timeout = 1000;
 static int clock_time = 60000;
 

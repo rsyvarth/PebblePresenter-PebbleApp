@@ -20,7 +20,7 @@ static TextLayer *auth_text_layer;
 static TextLayer *auth_layer;
 
 static char title[30] = "Pebble Presenter";
-// static char status_text[] = "Status:";
+static char timer_text[20] = "0";
 // static char status[8] = "Unknown";
 static char auth_text[] = "Auth Code:";
 static char auth[5] = "   ";
@@ -128,7 +128,7 @@ static void timer_callback(void *context) {
   sprintf(textTime, "%d", clock_time);
   text_layer_set_text(slide_timer_layer, textTime);
   
-  app_timer_register(timeout_ms, timer_callback, NULL);
+  app_timer_register(clock_timeout, timer_callback, NULL);
 }
 
 static void window_load(Window *window) {
@@ -212,7 +212,7 @@ static void init(void) {
   window_stack_push(window, true /* animated */);
 
   text_layer_set_text(title_layer, title);
-  text_layer_set_text(slide_timer_layer, status_text);
+  text_layer_set_text(slide_timer_layer, timer_text);
   // text_layer_set_text(status_layer, status);
   text_layer_set_text(auth_text_layer, auth_text);
   text_layer_set_text(auth_layer, auth);

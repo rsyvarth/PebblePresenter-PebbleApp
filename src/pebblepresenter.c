@@ -19,7 +19,7 @@ static TextLayer *title_layer;
 static TextLayer *auth_text_layer;
 static TextLayer *auth_layer;
 
-static char title[30] = "Presenter";
+static char title[30] = "Pebble Presenter";
 // static char status_text[] = "Status:";
 // static char status[8] = "Unknown";
 static char auth_text[] = "Auth Code:";
@@ -51,15 +51,15 @@ static void in_received_handler(DictionaryIterator *iter, void *context) {
     strncpy(title, title_tuple->value->cstring, sizeof(title));
     text_layer_set_text(title_layer, title);
   }
-  if (status_tuple) {
-    strncpy(status, status_tuple->value->cstring, sizeof(status));
-    //text_layer_set_text(status_layer, status);
-    if (strcmp(status, "Playing") == 0) {
-      action_bar_layer_set_icon(action_bar, BUTTON_ID_SELECT, action_icon_pause);
-    } else {
-      action_bar_layer_set_icon(action_bar, BUTTON_ID_SELECT, action_icon_play);
-    }
-  }
+  // if (status_tuple) {
+  //   strncpy(status, status_tuple->value->cstring, sizeof(status));
+  //   //text_layer_set_text(status_layer, status);
+  //   if (strcmp(status, "Playing") == 0) {
+  //     action_bar_layer_set_icon(action_bar, BUTTON_ID_SELECT, action_icon_pause);
+  //   } else {
+  //     action_bar_layer_set_icon(action_bar, BUTTON_ID_SELECT, action_icon_play);
+  //   }
+  // }
   if (auth_tuple) {
     strncpy(auth, auth_tuple->value->cstring, sizeof(auth));
     text_layer_set_text(auth_layer, auth);

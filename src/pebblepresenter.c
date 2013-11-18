@@ -45,7 +45,7 @@ void out_failed_handler(DictionaryIterator *failed, AppMessageResult reason, voi
 
 static void in_received_handler(DictionaryIterator *iter, void *context) {
   Tuple *title_tuple = dict_find(iter, KEY_TITLE);
-  Tuple *status_tuple = dict_find(iter, KEY_STATUS);
+  //Tuple *status_tuple = dict_find(iter, KEY_STATUS);
   Tuple *auth_tuple = dict_find(iter, KEY_AUTH);
 
   APP_LOG(APP_LOG_LEVEL_DEBUG, "incoming message from Pebble");
@@ -122,7 +122,7 @@ static void click_config_provider(void *context) {
 }
 
 static void timer_callback(void *context) {
-  // char textTime[30];
+  char textTime[30];
   
   // clock_time = clock_time - clock_timeout;
 

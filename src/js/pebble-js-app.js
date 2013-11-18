@@ -1,6 +1,6 @@
 var maxTriesForSendingAppMessage = 3;
 var timeoutForAppMessageRetry = 3000;
-var timeoutForVLCRequest = 12000;
+var timeoutForRequest = 3000;
 
 function sendAppMessage(message, numTries, transactionId) {
 	numTries = numTries || 0;
@@ -20,30 +20,33 @@ function sendAppMessage(message, numTries, transactionId) {
 	}
 }
 
-function makeRequestToVLC(server_host, server_pass, request) {
+function fetchAuthKey() {
 	var xhr = new XMLHttpRequest();
-	xhr.open('GET', 'http://' + server_host + '/requests/status.json?' + request, true, '', server_pass);
-	xhr.timeout = timeoutForVLCRequest;
+
+	var key = localStorage.getItem("pebble_id") ? localStorage.getItem("pebble_id") : '';
+
+	sendAppMessage({
+		'auth': key ? key : '----'
+	});
+	console.log('Getting pres info for: ' + key);
+
+	xhr.open('GET', 'http://pebblepresenter.syvarth.com/getPresentationPebble/' + key, true);
+	xhr.timeout = timeoutForRequest;
 	xhr.onload = function(e) {
 		if (xhr.readyState == 4) {
 			if (xhr.status == 200) {
+				console.log( xhr.responseText );
 				res    = JSON.parse(xhr.responseText);
-				title  = res.information.category.meta.filename || 'VLC Remote';
-				title  = title.substring(0,30);
-				status = res.state ? res.state.charAt(0).toUpperCase()+res.state.slice(1) : 'Unknown';
-				status = status.substring(0,30);
-				volume = res.volume || 0;
-				volume = (volume / 512) * 200;
-				volume = (volume > 200) ? 200 : volume;
-				volume = Math.round(volume).toString() + '%';
+
 				sendAppMessage({
-					'title': title,
-					'status': status,
-					'volume': volume
+					'auth': res.auth_key
 				});
+
+				localStorage.setItem("auth_key", response.auth_key);
+ 	            localStorage.setItem("pebble_id", response.pebble_id);
 			} else {
 				console.log('Request returned error code ' + xhr.status.toString());
-				sendAppMessage({'title': 'Error: ' + xhr.statusText});
+				sendAppMessage({'title': 'Error: ' + xhr.statusText.substring(0,22)});
 			}
 		}
 	}
@@ -54,7 +57,92 @@ function makeRequestToVLC(server_host, server_pass, request) {
 		sendAppMessage({'title': 'Error: Failed to connect!'});
 	};
 	xhr.send(null);
+
+  // var response;
+  // var req = new XMLHttpRequest();
+  // console.log('Getting pres info');
+  // // build the GET request
+  // var info = localStorage.getItem("auth_key") ? localStorage.getItem("auth_key") : '';
+  // req.open('GET', "http://pebblepresenter.syvarth.com/getPresentationPebble/"+info, true);
+  // req.onload = function(e) {
+  //         console.log(req.readyState);
+  //       if (req.readyState == 4) {
+  //         // 200 - HTTP OK
+  //         if(req.status == 200) {
+  //               console.log(req.responseText);
+  //               response = JSON.parse(req.responseText);
+  //               if (response.auth_key) {
+  //                   Pebble.sendAppMessage({symbol: response.auth_key});
+  //                   localStorage.setItem("auth_key", response.auth_key);
+  //                   localStorage.setItem("pebble_id", response.pebble_id);
+  //               } else if( response.pres_id ) {
+  //                       Pebble.sendAppMessage({symbol: 10});//Number of slides
+  //               }
+  //         } else {
+  //               console.log("Request returned error code " + req.status.toString());
+  //         }
+  //       }
+  // }
+  // req.send(null);
 }
+
+function changeSlide(direction) {
+  var response;
+  var req = new XMLHttpRequest();
+  console.log('Change the slide');
+  console.log(direction);
+  var direct = (direction == -1) ? 'next' : 'back';
+  // build the GET request
+  req.open('GET', "http://pebblepresenter.syvarth.com/changeSlide/"+localStorage.getItem("pebble_id")+"/"+direct, true);
+  req.onload = function(e) {
+        if (req.readyState == 4) {
+          // 200 - HTTP OK
+          if(req.status == 200) {
+                console.log(req.responseText);
+                Pebble.sendAppMessage({price: 0});
+          } else {
+                console.log("Request returned error code " + req.status.toString());
+          }
+        }
+  }
+  req.send(null);
+}
+
+// function makeRequestToVLC(server_host, server_pass, request) {
+// 	var xhr = new XMLHttpRequest();
+// 	xhr.open('GET', 'http://' + server_host + '/requests/status.json?' + request, true, '', server_pass);
+// 	xhr.timeout = timeoutForVLCRequest;
+// 	xhr.onload = function(e) {
+// 		if (xhr.readyState == 4) {
+// 			if (xhr.status == 200) {
+// 				res    = JSON.parse(xhr.responseText);
+// 				title  = res.information.category.meta.filename || 'VLC Remote';
+// 				title  = title.substring(0,30);
+// 				status = res.state ? res.state.charAt(0).toUpperCase()+res.state.slice(1) : 'Unknown';
+// 				status = status.substring(0,30);
+// 				volume = res.volume || 0;
+// 				volume = (volume / 512) * 200;
+// 				volume = (volume > 200) ? 200 : volume;
+// 				volume = Math.round(volume).toString() + '%';
+// 				sendAppMessage({
+// 					'title': title,
+// 					'status': status,
+// 					'volume': volume
+// 				});
+// 			} else {
+// 				console.log('Request returned error code ' + xhr.status.toString());
+// 				sendAppMessage({'title': 'Error: ' + xhr.statusText});
+// 			}
+// 		}
+// 	}
+// 	xhr.ontimeout = function() {
+// 		sendAppMessage({'title': 'Error: Request timed out!'});
+// 	};
+// 	xhr.onerror = function() {
+// 		sendAppMessage({'title': 'Error: Failed to connect!'});
+// 	};
+// 	xhr.send(null);
+// }
 
 Pebble.addEventListener('ready', function(e) {});
 
@@ -70,30 +158,29 @@ Pebble.addEventListener('appmessage', function(e) {
 	}
 
 	switch (e.payload.request) {
-		case 'play_pause':
-			makeRequestToVLC(server_host, server_pass, 'command=pl_pause');
-			break;
-		case 'vol_up':
-			makeRequestToVLC(server_host, server_pass, 'command=volume&val=%2B12.8');
-			break;
-		case 'vol_down':
-			makeRequestToVLC(server_host, server_pass, 'command=volume&val=-12.8');
-			break;
-		case 'vol_min':
-			makeRequestToVLC(server_host, server_pass, 'command=volume&val=0');
-			break;
-		case 'vol_max':
-			makeRequestToVLC(server_host, server_pass, 'command=volume&val=512');
-			break;
+		// case 'play_pause':
+		// 	makeRequestToVLC(server_host, server_pass, 'command=pl_pause');
+		// 	break;
+		// case 'vol_up':
+		// 	makeRequestToVLC(server_host, server_pass, 'command=volume&val=%2B12.8');
+		// 	break;
+		// case 'vol_down':
+		// 	makeRequestToVLC(server_host, server_pass, 'command=volume&val=-12.8');
+		// 	break;
+		// case 'vol_min':
+		// 	makeRequestToVLC(server_host, server_pass, 'command=volume&val=0');
+		// 	break;
+		// case 'vol_max':
+		// 	makeRequestToVLC(server_host, server_pass, 'command=volume&val=512');
+		// 	break;
 		case 'refresh':
-				sendAppMessage({
-					'auth':'1234'
-				});
+			fetchAuthKey();
 			//makeRequestToVLC(server_host, server_pass, 'command=volume&val=512');
 			break;
 		//case 'refresh':
 		default:
-			makeRequestToVLC(server_host, server_pass, 'refresh');
+			console.log('Command not recognized');
+			//makeRequestToVLC(server_host, server_pass, 'refresh');
 			break;
 	}
 });

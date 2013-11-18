@@ -96,8 +96,6 @@ static void down_single_click_handler(ClickRecognizerRef recognizer, void *conte
 
 static void select_single_click_handler(ClickRecognizerRef recognizer, void *context) {
   send_request("refresh");
-  strncpy(auth, "----",4);
-  text_layer_set_text(auth_layer, auth);
 }
 
 static void up_long_click_handler(ClickRecognizerRef recognizer, void *context) {

@@ -64,12 +64,6 @@ Pebble.addEventListener('appmessage', function(e) {
 	var server_host = localStorage.getItem('server_host');
 	var server_pass = localStorage.getItem('server_pass');
 
-	if (!server_host || !server_pass) {
-		console.log('Server options not set!');
-		sendAppMessage({'title': 'Set options via Pebble app'});
-		return;
-	}
-
 	if (!e.payload.request) {
 		console.log('server_host, server_pass, or request not set');
 		return;
@@ -98,28 +92,28 @@ Pebble.addEventListener('appmessage', function(e) {
 	}
 });
 
-Pebble.addEventListener('showConfiguration', function(e) {
-	var server_host = localStorage.getItem('server_host') || '';
-	var server_pass = localStorage.getItem('server_pass') || '';
-	var uri = 'https://rawgithub.com/Neal/pebble-vlc-remote/master/html/configuration.html?' +
-				'server_host=' + encodeURIComponent(server_host) +
-				'&server_pass=' + encodeURIComponent(server_pass);
-	console.log('showing configuration at uri: ' + uri);
-	Pebble.openURL(uri);
-});
+// Pebble.addEventListener('showConfiguration', function(e) {
+// 	var server_host = localStorage.getItem('server_host') || '';
+// 	var server_pass = localStorage.getItem('server_pass') || '';
+// 	var uri = 'https://rawgithub.com/Neal/pebble-vlc-remote/master/html/configuration.html?' +
+// 				'server_host=' + encodeURIComponent(server_host) +
+// 				'&server_pass=' + encodeURIComponent(server_pass);
+// 	console.log('showing configuration at uri: ' + uri);
+// 	Pebble.openURL(uri);
+// });
 
-Pebble.addEventListener('webviewclosed', function(e) {
-	console.log('configuration closed');
-	if (e.response) {
-		var options = JSON.parse(decodeURIComponent(e.response));
-		console.log('options received from configuration: ' + JSON.stringify(options));
-		localStorage.setItem('server_host', options['server_host']);
-		localStorage.setItem('server_pass', options['server_pass']);
-		makeRequestToVLC(options['server_host'], options['server_pass'], 'refresh');
-	} else {
-		console.log('no options received');
-	}
-});
+// Pebble.addEventListener('webviewclosed', function(e) {
+// 	console.log('configuration closed');
+// 	if (e.response) {
+// 		var options = JSON.parse(decodeURIComponent(e.response));
+// 		console.log('options received from configuration: ' + JSON.stringify(options));
+// 		localStorage.setItem('server_host', options['server_host']);
+// 		localStorage.setItem('server_pass', options['server_pass']);
+// 		makeRequestToVLC(options['server_host'], options['server_pass'], 'refresh');
+// 	} else {
+// 		console.log('no options received');
+// 	}
+// });
 
 
 

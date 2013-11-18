@@ -1,3 +1,7 @@
+//Pebble Presenter
+//By Robert Syvarth
+//Based off of https://github.com/Neal/pebble-vlc-remote
+
 #include <pebble.h>
 
 static Window *window;
@@ -10,22 +14,22 @@ static GBitmap *action_icon_play;
 static GBitmap *action_icon_pause;
 
 static TextLayer *title_layer;
-static TextLayer *status_text_layer;
-static TextLayer *status_layer;
-static TextLayer *volume_text_layer;
-static TextLayer *volume_layer;
+// static TextLayer *status_text_layer;
+// static TextLayer *status_layer;
+static TextLayer *auth_text_layer;
+static TextLayer *auth_layer;
 
-static char title[30] = "VLC Remote";
+static char title[30] = "Presenter";
 static char status_text[] = "Status:";
 static char status[8] = "Unknown";
-static char volume_text[] = "Volume:";
-static char volume[5] = "0%";
+static char auth_text[] = "Auth Code:";
+static char auth[5] = "----";
 
 enum {
   KEY_REQUEST,
   KEY_TITLE,
   KEY_STATUS,
-  KEY_VOLUME,
+  KEY_auth,
 };
 
 static void out_sent_handler(DictionaryIterator *sent, void *context) {
@@ -39,7 +43,7 @@ void out_failed_handler(DictionaryIterator *failed, AppMessageResult reason, voi
 static void in_received_handler(DictionaryIterator *iter, void *context) {
   Tuple *title_tuple = dict_find(iter, KEY_TITLE);
   Tuple *status_tuple = dict_find(iter, KEY_STATUS);
-  Tuple *volume_tuple = dict_find(iter, KEY_VOLUME);
+  Tuple *auth_tuple = dict_find(iter, KEY_auth);
 
   if (title_tuple) {
     strncpy(title, title_tuple->value->cstring, sizeof(title));
@@ -54,9 +58,9 @@ static void in_received_handler(DictionaryIterator *iter, void *context) {
       action_bar_layer_set_icon(action_bar, BUTTON_ID_SELECT, action_icon_play);
     }
   }
-  if (volume_tuple) {
-    strncpy(volume, volume_tuple->value->cstring, sizeof(volume));
-    text_layer_set_text(volume_layer, volume);
+  if (auth_tuple) {
+    strncpy(auth, auth_tuple->value->cstring, sizeof(auth));
+    text_layer_set_text(auth_layer, auth);
   }
 }
 
@@ -126,31 +130,31 @@ static void window_load(Window *window) {
   text_layer_set_background_color(title_layer, GColorClear);
   text_layer_set_font(title_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
 
-  status_text_layer = text_layer_create((GRect) { .origin = { 5, 54 }, .size = bounds.size });
-  text_layer_set_text_color(status_text_layer, GColorBlack);
-  text_layer_set_background_color(status_text_layer, GColorClear);
-  text_layer_set_font(status_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
+  // status_text_layer = text_layer_create((GRect) { .origin = { 5, 54 }, .size = bounds.size });
+  // text_layer_set_text_color(status_text_layer, GColorBlack);
+  // text_layer_set_background_color(status_text_layer, GColorClear);
+  // text_layer_set_font(status_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
 
-  status_layer = text_layer_create((GRect) { .origin = { 10, 54 + 14 }, .size = bounds.size });
-  text_layer_set_text_color(status_layer, GColorBlack);
-  text_layer_set_background_color(status_layer, GColorClear);
-  text_layer_set_font(status_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
+  // status_layer = text_layer_create((GRect) { .origin = { 10, 54 + 14 }, .size = bounds.size });
+  // text_layer_set_text_color(status_layer, GColorBlack);
+  // text_layer_set_background_color(status_layer, GColorClear);
+  // text_layer_set_font(status_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
 
-  volume_text_layer = text_layer_create((GRect) { .origin = { 5, 100 }, .size = bounds.size });
-  text_layer_set_text_color(volume_text_layer, GColorBlack);
-  text_layer_set_background_color(volume_text_layer, GColorClear);
-  text_layer_set_font(volume_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
+  auth_text_layer = text_layer_create((GRect) { .origin = { 5, 100 }, .size = bounds.size });
+  text_layer_set_text_color(auth_text_layer, GColorBlack);
+  text_layer_set_background_color(auth_text_layer, GColorClear);
+  text_layer_set_font(auth_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
 
-  volume_layer = text_layer_create((GRect) { .origin = { 10, 100 + 14 }, .size = bounds.size });
-  text_layer_set_text_color(volume_layer, GColorBlack);
-  text_layer_set_background_color(volume_layer, GColorClear);
-  text_layer_set_font(volume_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
+  auth_layer = text_layer_create((GRect) { .origin = { 10, 100 + 14 }, .size = bounds.size });
+  text_layer_set_text_color(auth_layer, GColorBlack);
+  text_layer_set_background_color(auth_layer, GColorClear);
+  text_layer_set_font(auth_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
 
   layer_add_child(window_layer, text_layer_get_layer(title_layer));
-  layer_add_child(window_layer, text_layer_get_layer(status_text_layer));
-  layer_add_child(window_layer, text_layer_get_layer(status_layer));
-  layer_add_child(window_layer, text_layer_get_layer(volume_text_layer));
-  layer_add_child(window_layer, text_layer_get_layer(volume_layer));
+  // layer_add_child(window_layer, text_layer_get_layer(status_text_layer));
+  // layer_add_child(window_layer, text_layer_get_layer(status_layer));
+  layer_add_child(window_layer, text_layer_get_layer(auth_text_layer));
+  layer_add_child(window_layer, text_layer_get_layer(auth_layer));
 }
 
 static void window_unload(Window *window) {
@@ -159,10 +163,10 @@ static void window_unload(Window *window) {
   gbitmap_destroy(action_icon_play);
   gbitmap_destroy(action_icon_pause);
   text_layer_destroy(title_layer);
-  text_layer_destroy(status_text_layer);
-  text_layer_destroy(status_layer);
-  text_layer_destroy(volume_text_layer);
-  text_layer_destroy(volume_layer);
+  // text_layer_destroy(status_text_layer);
+  // text_layer_destroy(status_layer);
+  text_layer_destroy(auth_text_layer);
+  text_layer_destroy(auth_layer);
   action_bar_layer_destroy(action_bar);
 }
 
@@ -190,10 +194,10 @@ static void init(void) {
   window_stack_push(window, true /* animated */);
 
   text_layer_set_text(title_layer, title);
-  text_layer_set_text(status_text_layer, status_text);
-  text_layer_set_text(status_layer, status);
-  text_layer_set_text(volume_text_layer, volume_text);
-  text_layer_set_text(volume_layer, volume);
+  // text_layer_set_text(status_text_layer, status_text);
+  // text_layer_set_text(status_layer, status);
+  text_layer_set_text(auth_text_layer, auth_text);
+  text_layer_set_text(auth_layer, auth);
 
   send_request("refresh");
 }

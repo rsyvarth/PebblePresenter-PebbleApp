@@ -1,19 +1,40 @@
 {
-  "uuid": "2a3352d5-2d44-437f-9652-98464640aeab",
-  "shortName": "Pebble Presenter",
-  "longName": "Pebble Presenter",
-  "companyName": "None",
-  "versionCode": 1,
-  "versionLabel": "1.0.0",
-  "watchapp": {
-    "watchface": false
-  },
-  "appKeys": {
-    "request": 0,
-    "next": 1,
-    "previous": 2
-  },
-  "resources": {
-    "media": []
-  }
+	"uuid": "2a3352d5-2d44-437f-9652-98464640aeab",
+	"shortName": "Pebble Presenter",
+	"longName": "Pebble Presenter",
+	"companyName": "None",
+	"versionCode": 1,
+	"versionLabel": "1.0.0",
+	"watchapp": {
+		"watchface": false
+	},
+	"appKeys": {
+		"request": 0,
+		"next": 1,
+		"previous": 2
+	},
+	"resources": {
+		"media": [
+			{
+				"type": "png",
+				"name": "ICON_VOLUME_UP",
+				"file": "images/volume_up.png"
+			},
+			{
+				"type": "png",
+				"name": "ICON_VOLUME_DOWN",
+				"file": "images/volume_down.png"
+			},
+			{
+				"type": "png",
+				"name": "ICON_PLAY",
+				"file": "images/play.png"
+			},
+			{
+				"type": "png",
+				"name": "ICON_PAUSE",
+				"file": "images/pause.png"
+			}
+		]
+	}
 }

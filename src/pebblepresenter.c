@@ -29,7 +29,7 @@ enum {
   KEY_REQUEST,
   KEY_TITLE,
   KEY_STATUS,
-  KEY_auth,
+  KEY_AUTH,
 };
 
 static void out_sent_handler(DictionaryIterator *sent, void *context) {
@@ -43,7 +43,7 @@ void out_failed_handler(DictionaryIterator *failed, AppMessageResult reason, voi
 static void in_received_handler(DictionaryIterator *iter, void *context) {
   Tuple *title_tuple = dict_find(iter, KEY_TITLE);
   Tuple *status_tuple = dict_find(iter, KEY_STATUS);
-  Tuple *auth_tuple = dict_find(iter, KEY_auth);
+  Tuple *auth_tuple = dict_find(iter, KEY_AUTH);
 
   if (title_tuple) {
     strncpy(title, title_tuple->value->cstring, sizeof(title));
@@ -93,7 +93,7 @@ static void down_single_click_handler(ClickRecognizerRef recognizer, void *conte
 }
 
 static void select_single_click_handler(ClickRecognizerRef recognizer, void *context) {
-  send_request("play_pause");
+  send_request("refresh");
 }
 
 static void up_long_click_handler(ClickRecognizerRef recognizer, void *context) {

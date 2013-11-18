@@ -86,6 +86,12 @@ Pebble.addEventListener('appmessage', function(e) {
 			makeRequestToVLC(server_host, server_pass, 'command=volume&val=512');
 			break;
 		case 'refresh':
+				sendAppMessage({
+					'auth':'1234'
+				});
+			//makeRequestToVLC(server_host, server_pass, 'command=volume&val=512');
+			break;
+		//case 'refresh':
 		default:
 			makeRequestToVLC(server_host, server_pass, 'refresh');
 			break;

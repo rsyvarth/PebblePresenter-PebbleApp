@@ -53,7 +53,7 @@ static void in_received_handler(DictionaryIterator *iter, void *context) {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "incoming message from Pebble");
 
   if (time_tuple) {
-    clock_time = time_tuple->value->cstring;
+    clock_time = (int) strtol(time_tuple->value->cstring, (char **)NULL, 10);
   }
   // if (status_tuple) {
   //   strncpy(status, status_tuple->value->cstring, sizeof(status));

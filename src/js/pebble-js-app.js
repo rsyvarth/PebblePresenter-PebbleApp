@@ -35,10 +35,10 @@ function sendAppMessage(message, numTries, transactionId) {
 function fetchAuthKey( pebble_id, cb ) {
 	var xhr = new XMLHttpRequest();
 
-	var pebble_key = ( localStorage.getItem("pebble_key") ) ? localStorage.getItem("pebble_key") : '';
+	var pebble_key = localStorage.getItem("auth_key") || '';
 
 	sendAppMessage({
-		'auth': pebble_key ? pebble_key : '----'
+		'auth': pebble_key || '----'
 	});
 
 	if( !pebble_key.length || !pebble_id.length ) {
@@ -155,7 +155,9 @@ Pebble.addEventListener('appmessage', function(e) {
 			changeSlide('prev');
 			break;
 		case 'refresh':
-			var pebble_id = localStorage.getItem("pebble_id") ? localStorage.getItem("pebble_id") : '';
+			var pebble_id = localStorage.getItem("pebble_id") || '';
+
+			console.log( 'Pebble id is ' +  localStorage.getItem("pebble_id") );
 
 			fetchAuthKey( pebble_id );
 			break;

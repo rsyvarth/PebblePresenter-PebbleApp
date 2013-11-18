@@ -116,7 +116,7 @@ function _changeSlide(direction) {
 				console.log( xhr.responseText );
 				res = JSON.parse(xhr.responseText);
 
-				currSlide = direction == 'next' ? currSlide++ : currSlide--;
+				currSlide = direction == 'next' ? currSlide + 1 : currSlide - 1;
 				currSlide = currSlide > slides.length ? slides.length : currSlide;
 				currSlide = currSlide < 0 ? 0 : currSlide;
 

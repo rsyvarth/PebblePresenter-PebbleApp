@@ -91,7 +91,7 @@ static void up_single_click_handler(ClickRecognizerRef recognizer, void *context
 }
 
 static void down_single_click_handler(ClickRecognizerRef recognizer, void *context) {
-  send_request("prex");
+  send_request("prev");
 }
 
 static void select_single_click_handler(ClickRecognizerRef recognizer, void *context) {

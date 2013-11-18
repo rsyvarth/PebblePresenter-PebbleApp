@@ -28,7 +28,8 @@ function fetchAuthKey( pebble_id, cb ) {
 	sendAppMessage({
 		'auth': pebble_key ? pebble_key : '----'
 	});
-	console.log('Getting pres info for: ' + key);
+	
+	console.log('Getting pres info for: ' + pebble_id);
 
 	xhr.open('GET', 'http://pebblepresenter.syvarth.com/getPresentationPebble/' + pebble_id, true);
 	xhr.timeout = timeoutForRequest;

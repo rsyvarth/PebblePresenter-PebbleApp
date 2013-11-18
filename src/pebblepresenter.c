@@ -26,7 +26,7 @@ static char auth_text[] = "Auth Code:";
 static char auth[5] = "   ";
 const  uint32_t clock_timeout_const = 1000;
 //static int clock_timeout = 1;
-static int clock_time = 90;
+static int clock_time = 20;
 static char timerText[30];
 
 
@@ -163,12 +163,11 @@ static void timer_callback(void *context) {
 
   clock_time = clock_time - 1;
 
-  if( clock_time == 11 ) {
-    vibes_short_pulse();
+  if( clock_time == 11 || clock_time == 10 ) {
     vibes_short_pulse();
   } else if( clock_time == 1 ) {
     vibes_long_pulse();
-    clock_time = 90;
+    clock_time = 20;
   }
 
   int min = clock_time / 60;

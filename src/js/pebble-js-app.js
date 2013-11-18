@@ -28,7 +28,13 @@ function fetchAuthKey( pebble_id, cb ) {
 	sendAppMessage({
 		'auth': pebble_key ? pebble_key : '----'
 	});
-	
+
+	if( !pebble_key || !pebble_id ) {
+		localStorage.setItem("auth_key", '');
+ 	    localStorage.setItem("pebble_id", '');
+ 	    pebble_id = '';
+	}
+
 	console.log('Getting pres info for: ' + pebble_id);
 
 	xhr.open('GET', 'http://pebblepresenter.syvarth.com/getPresentationPebble/' + pebble_id, true);
@@ -40,7 +46,9 @@ function fetchAuthKey( pebble_id, cb ) {
 				res = JSON.parse(xhr.responseText);
 
 				if( res.pres_id ) {
-
+					sendAppMessage({
+						'auth': res.auth_key
+					});
 				} else if( auth_key ) {
 					sendAppMessage({
 						'auth': res.auth_key

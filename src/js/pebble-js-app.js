@@ -104,7 +104,7 @@ function changeSlide(direction) {
 function _changeSlide(direction) {
 	var xhr = new XMLHttpRequest();
 
-	console.log('Change the slide: ' + direction);
+	console.log('Change the slide1: ' + direction);
 
 	var direct = (direction == 'next') ? 'next' : 'back';
 

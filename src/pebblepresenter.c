@@ -205,12 +205,12 @@ static void window_load(Window *window) {
   title_layer = text_layer_create((GRect) { .origin = { 5, 0 }, .size = { bounds.size.w - 28, 52 } });
   text_layer_set_text_color(title_layer, GColorBlack);
   text_layer_set_background_color(title_layer, GColorClear);
-  text_layer_set_font(title_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
+  text_layer_set_font(title_layer, fonts_get_system_font(FONT_KEY_GOTHIC_20_BOLD));
 
   slide_timer_layer = text_layer_create((GRect) { .origin = { 5, 54 }, .size = bounds.size });
   text_layer_set_text_color(slide_timer_layer, GColorBlack);
   text_layer_set_background_color(slide_timer_layer, GColorClear);
-  text_layer_set_font(slide_timer_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
+  text_layer_set_font(slide_timer_layer, fonts_get_system_font(FONT_KEY_GOTHIC_26));
 
   // status_layer = text_layer_create((GRect) { .origin = { 10, 54 + 14 }, .size = bounds.size });
   // text_layer_set_text_color(status_layer, GColorBlack);

@@ -14,7 +14,7 @@ static GBitmap *action_icon_play;
 static GBitmap *action_icon_pause;
 
 static TextLayer *title_layer;
-// static TextLayer *status_text_layer;
+static TextLayer *slide_timer_layer;
 // static TextLayer *status_layer;
 static TextLayer *auth_text_layer;
 static TextLayer *auth_layer;
@@ -24,6 +24,8 @@ static char title[30] = "Pebble Presenter";
 // static char status[8] = "Unknown";
 static char auth_text[] = "Auth Code:";
 static char auth[5] = "   ";
+static uint32_t clock_timeout = 1000;
+static uint32_t clock_time = 60000;
 
 enum {
   KEY_REQUEST,
@@ -118,6 +120,15 @@ static void click_config_provider(void *context) {
   // window_long_click_subscribe(BUTTON_ID_DOWN, 700, down_long_click_handler, NULL);
 }
 
+static void timer_callback(void *context) {
+  // layer_mark_dirty(square_layer);
+  clock_time = clock_time - clock_timeout;
+
+  text_layer_set_text(slide_timer_layer, clock_time);
+  
+  app_timer_register(timeout_ms, timer_callback, NULL);
+}
+
 static void window_load(Window *window) {
   action_bar = action_bar_layer_create();
   action_bar_layer_add_to_window(action_bar, window);
@@ -135,10 +146,10 @@ static void window_load(Window *window) {
   text_layer_set_background_color(title_layer, GColorClear);
   text_layer_set_font(title_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
 
-  // status_text_layer = text_layer_create((GRect) { .origin = { 5, 54 }, .size = bounds.size });
-  // text_layer_set_text_color(status_text_layer, GColorBlack);
-  // text_layer_set_background_color(status_text_layer, GColorClear);
-  // text_layer_set_font(status_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
+  slide_timer_layer = text_layer_create((GRect) { .origin = { 5, 54 }, .size = bounds.size });
+  text_layer_set_text_color(slide_timer_layer, GColorBlack);
+  text_layer_set_background_color(slide_timer_layer, GColorClear);
+  text_layer_set_font(slide_timer_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
 
   // status_layer = text_layer_create((GRect) { .origin = { 10, 54 + 14 }, .size = bounds.size });
   // text_layer_set_text_color(status_layer, GColorBlack);
@@ -156,7 +167,7 @@ static void window_load(Window *window) {
   text_layer_set_font(auth_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
 
   layer_add_child(window_layer, text_layer_get_layer(title_layer));
-  // layer_add_child(window_layer, text_layer_get_layer(status_text_layer));
+  layer_add_child(window_layer, text_layer_get_layer(slide_timer_layer));
   // layer_add_child(window_layer, text_layer_get_layer(status_layer));
   layer_add_child(window_layer, text_layer_get_layer(auth_text_layer));
   layer_add_child(window_layer, text_layer_get_layer(auth_layer));
@@ -168,7 +179,7 @@ static void window_unload(Window *window) {
   gbitmap_destroy(action_icon_play);
   gbitmap_destroy(action_icon_pause);
   text_layer_destroy(title_layer);
-  // text_layer_destroy(status_text_layer);
+  text_layer_destroy(slide_timer_layer);
   // text_layer_destroy(status_layer);
   text_layer_destroy(auth_text_layer);
   text_layer_destroy(auth_layer);
@@ -199,10 +210,12 @@ static void init(void) {
   window_stack_push(window, true /* animated */);
 
   text_layer_set_text(title_layer, title);
-  // text_layer_set_text(status_text_layer, status_text);
+  text_layer_set_text(slide_timer_layer, status_text);
   // text_layer_set_text(status_layer, status);
   text_layer_set_text(auth_text_layer, auth_text);
   text_layer_set_text(auth_layer, auth);
+
+  app_timer_register(clock_timeout, timer_callback, NULL);
 
   send_request("refresh");
 }

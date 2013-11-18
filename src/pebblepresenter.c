@@ -26,7 +26,7 @@ static char auth_text[] = "Auth Code:";
 static char auth[5] = "   ";
 const  uint32_t clock_timeout_const = 1000;
 //static int clock_timeout = 1;
-static int clock_time = 0;
+static uint8_t clock_time = 0;
 static char timerText[30];
 
 
@@ -55,7 +55,7 @@ static void in_received_handler(DictionaryIterator *iter, void *context) {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "incoming message from Pebble");
 
   if (time_tuple) {
-    clock_time = (int) strtol(time_tuple->value->cstring, (char **)NULL, 10);
+    clock_time = (uint8_t) time_tuple->value->uint8;
   }
   // if (status_tuple) {
   //   strncpy(status, status_tuple->value->cstring, sizeof(status));

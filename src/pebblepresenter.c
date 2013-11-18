@@ -49,7 +49,7 @@ void out_failed_handler(DictionaryIterator *failed, AppMessageResult reason, voi
 
 static void in_received_handler(DictionaryIterator *iter, void *context) {
   Tuple *auth_tuple = dict_find(iter, KEY_AUTH);
-  Tuple *time_tuple = dict_find(iter, KEY_TIME);
+  //Tuple *time_tuple = dict_find(iter, KEY_TIME);
 
 
   APP_LOG(APP_LOG_LEVEL_DEBUG, "incoming message from Pebble");

@@ -5,7 +5,11 @@ var timeoutForRequest = 20000;
 var slides = [
 	{ time: 20 },
 	{ time: 30 },
-	{ time: 40 }
+	{ time: 40 },
+	{ time: 50 },
+	{ time: 60 },
+	{ time: 70 },
+	{ time: 80 }
 ];
 
 var currSlide = 0;
@@ -100,7 +104,7 @@ function changeSlide(direction) {
 function _changeSlide(direction) {
 	var xhr = new XMLHttpRequest();
 
-	console.log('Change the slide1: ' + direction);
+	console.log('Change the slide: ' + direction);
 
 	var direct = (direction == 'next') ? 'next' : 'back';
 
@@ -137,7 +141,7 @@ function _changeSlide(direction) {
 }
 
 
-Pebble.addEventListener('ready', function(e) {});
+Pebble.addEventListener('ready', function(e) { console.log('JS Ready'); });
 
 Pebble.addEventListener('appmessage', function(e) {
 	console.log('AppMessage received from Pebble: ' + JSON.stringify(e.payload));

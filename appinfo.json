@@ -11,7 +11,7 @@
 	"appKeys": {
 		"request": 0,
 		"auth": 1,
-		"time":2
+		"time": 2
 	},
 	"resources": {
 		"media": [

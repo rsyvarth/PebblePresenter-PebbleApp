@@ -52,7 +52,7 @@ static void in_received_handler(DictionaryIterator *iter, void *context) {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "incoming message from Pebble");
 
   if (time_tuple) {
-    clock_time = time_tuple->value;
+    clock_time = time_tuple->value->integer;
   }
   // if (status_tuple) {
   //   strncpy(status, status_tuple->value->cstring, sizeof(status));
@@ -74,7 +74,7 @@ void in_dropped_handler(AppMessageResult reason, void *context) {
 }
 
 void send_request(char *request) {
-  Tuplet request_tuple = TupletCString(KEY_REQUEST, request);
+  Tuplet request_tuple = TupletCString(KEY_AUTH, request);
 
   DictionaryIterator *iter;
   app_message_outbox_begin(&iter);

@@ -163,14 +163,14 @@ void itoa(int n, char s[]){
 static void timer_callback(void *context) { 
   char tmp[10];
 
-  clock_time = clock_time - 1;
+  if( clock_time > 0 ) {
+    clock_time = clock_time - 1;
+  }
 
   if( clock_time == 11 || clock_time == 10 ) {
     vibes_short_pulse(); //Warning pulse
   } else if( clock_time == 1 ) {
     vibes_long_pulse(); //Time is up
-  } else if( clock_time <= 0 ) {
-    clock_time = 0;//Don't let things get negative
   }
 
   int min = clock_time / 60;

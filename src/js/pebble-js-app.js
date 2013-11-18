@@ -49,13 +49,13 @@ function fetchAuthKey( pebble_id, cb ) {
 					sendAppMessage({
 						'auth': res.auth_key
 					});
-				} else if( auth_key ) {
+				} else if( res.auth_key ) {
 					sendAppMessage({
 						'auth': res.auth_key
 					});
 
-					localStorage.setItem("auth_key", response.auth_key);
- 	            	localStorage.setItem("pebble_id", response.pebble_id);
+					localStorage.setItem("auth_key", res.auth_key);
+ 	            	localStorage.setItem("pebble_id", res.pebble_id);
 				}
 
 				if( typeof cb == 'function' ) {

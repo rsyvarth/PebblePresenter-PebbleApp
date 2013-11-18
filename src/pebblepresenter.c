@@ -96,7 +96,7 @@ static void down_single_click_handler(ClickRecognizerRef recognizer, void *conte
 
 static void select_single_click_handler(ClickRecognizerRef recognizer, void *context) {
   send_request("refresh");
-  auth = '----';
+  auth[] = '----';
   text_layer_set_text(auth_layer, auth);
 }
 

@@ -32,6 +32,7 @@ static char timerText[30];
 
 
 enum {
+  KEY_REQUEST,
   KEY_AUTH,
   KEY_TIME
 };
@@ -74,7 +75,7 @@ void in_dropped_handler(AppMessageResult reason, void *context) {
 }
 
 void send_request(char *request) {
-  Tuplet request_tuple = TupletCString(KEY_AUTH, request);
+  Tuplet request_tuple = TupletCString(KEY_REQUEST, request);
 
   DictionaryIterator *iter;
   app_message_outbox_begin(&iter);

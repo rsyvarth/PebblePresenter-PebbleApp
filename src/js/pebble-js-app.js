@@ -35,13 +35,13 @@ function sendAppMessage(message, numTries, transactionId) {
 function fetchAuthKey( pebble_id, cb ) {
 	var xhr = new XMLHttpRequest();
 
-	var pebble_key = ( pebble_id && localStorage.getItem("pebble_key") ) ? localStorage.getItem("pebble_key") : '';
+	var pebble_key = ( localStorage.getItem("pebble_key") ) ? localStorage.getItem("pebble_key") : '';
 
 	sendAppMessage({
 		'auth': pebble_key ? pebble_key : '----'
 	});
 
-	if( !pebble_key || !pebble_id ) {
+	if( !pebble_key.length || !pebble_id.length ) {
 		localStorage.setItem("auth_key", '');
  	    localStorage.setItem("pebble_id", '');
  	    pebble_id = '';
@@ -119,6 +119,8 @@ function _changeSlide(direction) {
 				currSlide = direction == 'next' ? currSlide++ : currSlide--;
 				currSlide = currSlide > slides.length ? slides.length : currSlide;
 				currSlide = currSlide < 0 ? 0 : currSlide;
+
+				console.log('on slide: ' + currSlide);
 
 				sendAppMessage({
 					'time': slides[ currSlide ].time

@@ -210,7 +210,7 @@ static void window_load(Window *window) {
   slide_timer_layer = text_layer_create((GRect) { .origin = { 5, 36 }, .size = bounds.size });
   text_layer_set_text_color(slide_timer_layer, GColorBlack);
   text_layer_set_background_color(slide_timer_layer, GColorClear);
-  text_layer_set_font(slide_timer_layer, fonts_get_system_font(FONT_KEY_BITHAM_42_MEDIUM_NUMBERS));
+  text_layer_set_font(slide_timer_layer, fonts_get_system_font(FONT_KEY_ROBOTO_BOLD_SUBSET_49));
 
   // status_layer = text_layer_create((GRect) { .origin = { 10, 54 + 14 }, .size = bounds.size });
   // text_layer_set_text_color(status_layer, GColorBlack);

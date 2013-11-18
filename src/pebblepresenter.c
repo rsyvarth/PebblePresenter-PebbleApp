@@ -45,6 +45,7 @@ static void out_sent_handler(DictionaryIterator *sent, void *context) {
 
 void out_failed_handler(DictionaryIterator *failed, AppMessageResult reason, void *context) {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "Failed to send AppMessage to Pebble");
+  APP_LOG(APP_LOG_LEVEL_DEBUG, reason);
 }
 
 static void in_received_handler(DictionaryIterator *iter, void *context) {
@@ -74,6 +75,7 @@ static void in_received_handler(DictionaryIterator *iter, void *context) {
 
 void in_dropped_handler(AppMessageResult reason, void *context) {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "incoming message from Pebble dropped");
+  APP_LOG(APP_LOG_LEVEL_DEBUG, reason);
 }
 
 void send_request(char *request) {

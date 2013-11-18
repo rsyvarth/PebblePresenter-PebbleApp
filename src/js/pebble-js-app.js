@@ -5,11 +5,7 @@ var timeoutForRequest = 20000;
 var slides = [
 	{ time: 20 },
 	{ time: 30 },
-	{ time: 40 },
-	{ time: 50 },
-	{ time: 60 },
-	{ time: 70 },
-	{ time: 80 }
+	{ time: 40 }
 ];
 
 var currSlide = 0;

@@ -2,7 +2,6 @@
 //By Robert Syvarth
 //Based off of https://github.com/Neal/pebble-vlc-remote
 
-#include <stdio.h>
 #include <pebble.h>
 
 static Window *window;
@@ -122,13 +121,47 @@ static void click_config_provider(void *context) {
   // window_long_click_subscribe(BUTTON_ID_DOWN, 700, down_long_click_handler, NULL);
 }
 
-static void timer_callback(void *context) {
-  char textTime[60];
-  
+
+
+//-----------------------------------
+// Hack to include the iota functions
+//-----------------------------------
+
+/* reverse:  reverse string s in place */
+void reverse(char s[]){
+     int i, j;
+     char c;
+ 
+     for (i = 0, j = strlen(s)-1; i<j; i++, j--) {
+         c = s[i];
+         s[i] = s[j];
+         s[j] = c;
+     }
+}
+
+void itoa(int n, char s[]){
+     int i, sign;
+ 
+     if ((sign = n) < 0)  /* record sign */
+         n = -n;          /* make n positive */
+     i = 0;
+     do {       /* generate digits in reverse order */
+         s[i++] = n % 10 + '0';   /* get next digit */
+     } while ((n /= 10) > 0);     /* delete it */
+     if (sign < 0)
+         s[i++] = '-';
+     s[i] = '\0';
+     reverse(s);
+}
+
+//-----------------------------------
+// END: Hack to include the iota functions
+//-----------------------------------
+
+static void timer_callback(void *context) { 
   clock_time = clock_time - clock_timeout;
 
-  sprintf(textTime, "%d", clock_time);
-  //text_layer_set_text(slide_timer_layer, textTime);
+  text_layer_set_text(slide_timer_layer, itoa(clock_time));
   
   app_timer_register(clock_timeout_const, timer_callback, NULL);
 }

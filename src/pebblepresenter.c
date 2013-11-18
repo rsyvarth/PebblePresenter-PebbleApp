@@ -167,7 +167,7 @@ static void timer_callback(void *context) {
   }
   itoa(clock_time, timerText);
 
-  APP_LOG(APP_LOG_LEVEL_DEBUG, 'timer');
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "timer hit");
   APP_LOG(APP_LOG_LEVEL_DEBUG, timerText);
 
 

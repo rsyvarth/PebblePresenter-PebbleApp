@@ -1,5 +1,5 @@
 var maxTriesForSendingAppMessage = 3;
-var timeoutForAppMessageRetry = 3000;
+var timeoutForAppMessageRetry = 1000;
 var timeoutForRequest = 20000;
 
 var slides = [
@@ -24,7 +24,7 @@ function sendAppMessage(message, numTries, transactionId) {
 				console.log('Failed sending AppMessage for transactionId:' + e.data.transactionId + '. Error: ' + e.data.error.message);
 				setTimeout(function() {
 					sendAppMessage(message, numTries, e.data.transactionId);
-				}, 3000);
+				}, timeoutForAppMessageRetry);
 			}
 		);
 	} else {

@@ -3,13 +3,13 @@ var timeoutForAppMessageRetry = 1000;
 var timeoutForRequest = 20000;
 
 var slides = [
-	{ time: 20 },
+	{ time: 90 },
 	{ time: 30 },
-	{ time: 40 },
-	{ time: 50 },
 	{ time: 60 },
-	{ time: 70 },
-	{ time: 80 }
+	{ time: 120 },
+	{ time: 60 },
+	{ time: 75 },
+	{ time: 20 }
 ];
 
 var currSlide = 0;

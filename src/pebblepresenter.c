@@ -25,8 +25,8 @@ static char timer_text[20] = "0";
 static char auth_text[] = "Auth Code:";
 static char auth[5] = "   ";
 const  uint32_t clock_timeout_const = 1000;
-static int clock_timeout = 1000;
-static int clock_time = 60000;
+int clock_timeout = 1000;
+int clock_time = 60000;
 
 enum {
   KEY_REQUEST,
@@ -161,6 +161,12 @@ void itoa(int n, char s[]){
 static void timer_callback(void *context) { 
   char timerText[60];
   clock_time = clock_time - clock_timeout;
+
+  if( clock_time < 0 ) {
+    clock_time = 6000;
+  }
+  APP_LOG(APP_LOG_LEVEL_DEBUG, clock_time);
+
 
   itoa(clock_time, timerText);
   text_layer_set_text(slide_timer_layer, timerText);
